@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import { sdk } from '@farcaster/frame-sdk';
+import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { config } from './wagmi';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { ExploreTab } from './components/ExploreTab';
@@ -8,6 +11,8 @@ import { MineTab } from './components/MineTab';
 import { BottomNav } from './components/BottomNav';
 import { UserMenu } from './components/UserMenu';
 import './styles/App.css';
+
+const queryClient = new QueryClient();
 
 const AppContent: React.FC = () => {
   const { activeTab } = useApp();
@@ -43,9 +48,13 @@ function App() {
   }, []);
 
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <AppContent />
+        </AppProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 

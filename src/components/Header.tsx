@@ -1,8 +1,14 @@
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { useApp } from '../context/AppContext';
 
 export const Header: React.FC = () => {
-  const { user, setShowUserMenu } = useApp();
+  const { setShowUserMenu } = useApp();
+  const { address, isConnected } = useAccount();
+
+  const formatAddress = (addr: string) => {
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
 
   return (
     <header className="header">
@@ -11,8 +17,10 @@ export const Header: React.FC = () => {
         className="user-avatar-button"
         onClick={() => setShowUserMenu(true)}
       >
-        {user ? (
-          <img src={user.avatar} alt="User Avatar" className="user-avatar" />
+        {isConnected && address ? (
+          <div className="user-avatar-placeholder">
+            {formatAddress(address)}
+          </div>
         ) : (
           <div className="user-avatar-placeholder">👤</div>
         )}

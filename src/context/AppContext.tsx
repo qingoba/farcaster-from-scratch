@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { TabType, ExploreMode, MineTab, Gift, User } from '../types';
-import { mockGifts, mockUser } from '../data/mockData';
+import { useAccount } from 'wagmi';
+import { TabType, ExploreMode, MineTab, Gift } from '../types';
+import { mockGifts } from '../data/mockData';
 
 interface AppContextType {
   // Navigation
@@ -13,7 +14,6 @@ interface AppContextType {
   
   // Data
   gifts: Gift[];
-  user: User | null;
   
   // UI State
   showUserMenu: boolean;
@@ -36,7 +36,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     mineTab,
     setMineTab,
     gifts: mockGifts,
-    user: mockUser,
     showUserMenu,
     setShowUserMenu
   };

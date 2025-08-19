@@ -1,23 +1,31 @@
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { useApp } from '../context/AppContext';
 import { GiftItem } from './GiftItem';
 import { canUserClaimGift } from '../data/mockData';
 
 export const MineTab: React.FC = () => {
-  const { mineTab, setMineTab, gifts, user } = useApp();
+  const { mineTab, setMineTab, gifts } = useApp();
+  const { address, isConnected } = useAccount();
   
-  if (!user) return <div>Please connect your wallet</div>;
+  if (!isConnected || !address) {
+    return (
+      <div className="empty-state">
+        Please connect your wallet to view your gifts
+      </div>
+    );
+  }
 
   const getFilteredGifts = () => {
     switch (mineTab) {
       case 'claimable':
-        return gifts.filter(gift => canUserClaimGift(gift, user.address));
+        return gifts.filter(gift => canUserClaimGift(gift, address));
       case 'received':
         return gifts.filter(gift => 
-          gift.isClaimed && (gift.to === user.address || gift.to === 'everyone')
+          gift.isClaimed && (gift.to === address || gift.to === 'everyone')
         );
       case 'sent':
-        return gifts.filter(gift => gift.from === user.address);
+        return gifts.filter(gift => gift.from === address);
       default:
         return [];
     }

@@ -1,7 +1,7 @@
 import React from 'react';
+import { useAccount } from 'wagmi';
 import { Gift } from '../types';
 import { canUserClaimGift } from '../data/mockData';
-import { useApp } from '../context/AppContext';
 
 interface GiftItemProps {
   gift: Gift;
@@ -9,13 +9,13 @@ interface GiftItemProps {
 }
 
 export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = false }) => {
-  const { user } = useApp();
+  const { address } = useAccount();
   
-  const canClaim = user && canUserClaimGift(gift, user.address);
+  const canClaim = address && canUserClaimGift(gift, address);
   
-  const formatAddress = (address: string) => {
-    if (address === 'everyone') return 'Everyone';
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  const formatAddress = (addr: string) => {
+    if (addr === 'everyone') return 'Everyone';
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
   return (
