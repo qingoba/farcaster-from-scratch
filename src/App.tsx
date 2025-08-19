@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { sdk } from '@farcaster/frame-sdk';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { ExploreTab } from './components/ExploreTab';
@@ -37,6 +38,10 @@ const AppContent: React.FC = () => {
 };
 
 function App() {
+  useEffect(() => {
+    sdk.actions.ready();
+  }, []);
+
   return (
     <AppProvider>
       <AppContent />
