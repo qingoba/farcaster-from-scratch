@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { useAccount } from 'wagmi';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { TabType, ExploreMode, MineTab, Gift } from '../types';
-import { mockGifts } from '../data/mockData';
+import { giftService } from '../services/giftService';
 
 interface AppContextType {
   // Navigation
@@ -14,6 +13,8 @@ interface AppContextType {
   
   // Data
   gifts: Gift[];
+  loading: boolean;
+  refreshGifts: () => Promise<void>;
   
   // UI State
   showUserMenu: boolean;
@@ -27,7 +28,38 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [exploreMode, setExploreMode] = useState<ExploreMode>('live');
   const [mineTab, setMineTab] = useState<MineTab>('claimable');
   const [showUserMenu, setShowUserMenu] = useState(false);
-  
+  const [gifts, setGifts] = useState<Gift[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch gifts data
+  const fetchGifts = async () => {
+    console.log('🚀 AppContext.fetchGifts() called');
+    setLoading(true);
+    try {
+      const allGifts = await giftService.getAllGifts();
+      console.log(`📦 AppContext received ${allGifts.length} gifts`);
+      setGifts(allGifts);
+    } catch (error) {
+      console.error('💥 AppContext failed to fetch gifts:', error);
+    } finally {
+      setLoading(false);
+      console.log('✅ AppContext.fetchGifts() completed');
+    }
+  };
+
+  // Refresh gifts (clear cache and refetch)
+  const refreshGifts = async () => {
+    console.log('🔄 AppContext.refreshGifts() called');
+    giftService.clearCache();
+    await fetchGifts();
+  };
+
+  // Initial data fetch
+  useEffect(() => {
+    console.log('🎯 AppContext useEffect triggered - initial data fetch');
+    fetchGifts();
+  }, []);
+
   const value: AppContextType = {
     activeTab,
     setActiveTab,
@@ -35,10 +67,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setExploreMode,
     mineTab,
     setMineTab,
-    gifts: mockGifts,
+    gifts,
+    loading,
+    refreshGifts,
     showUserMenu,
     setShowUserMenu
   };
+
+  console.log(`📊 AppContext render - gifts: ${gifts.length}, loading: ${loading}`);
 
   return (
     <AppContext.Provider value={value}>

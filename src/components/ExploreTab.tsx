@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { GiftItem } from './GiftItem';
 
 export const ExploreTab: React.FC = () => {
-  const { exploreMode, setExploreMode, gifts } = useApp();
+  const { exploreMode, setExploreMode, gifts, loading, refreshGifts } = useApp();
   
   const filteredGifts = gifts
     .filter(gift => exploreMode === 'live' ? !gift.isClaimed : gift.isClaimed)
@@ -27,17 +27,36 @@ export const ExploreTab: React.FC = () => {
             Historic
           </button>
         </div>
+        <button 
+          className="refresh-button"
+          onClick={refreshGifts}
+          disabled={loading}
+        >
+          {loading ? '🔄' : '↻'} Refresh
+        </button>
       </div>
       
-      <div className="gifts-list">
-        {filteredGifts.map(gift => (
-          <GiftItem 
-            key={gift.id} 
-            gift={gift} 
-            showClaimButton={exploreMode === 'live'} 
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="loading-state">
+          <div className="loading-spinner">🔄</div>
+          <p>Loading gifts from blockchain...</p>
+        </div>
+      ) : (
+        <div className="gifts-list">
+          {filteredGifts.map(gift => (
+            <GiftItem 
+              key={gift.id} 
+              gift={gift} 
+              showClaimButton={exploreMode === 'live'} 
+            />
+          ))}
+          {filteredGifts.length === 0 && (
+            <div className="empty-state">
+              No {exploreMode} gifts found
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
