@@ -1,3 +1,9 @@
+安装依赖: `npm install`
+
+启动: `npm run dev`
+
+***
+
 This is a [Vite](https://vitejs.dev) project bootstrapped with [`@farcaster/create-mini-app`](https://github.com/farcasterxyz/miniapps/tree/main/packages/create-mini-app).
 
 For documentation and guides, visit [miniapps.farcaster.xyz](https://miniapps.farcaster.xyz/docs/getting-started).
@@ -20,4 +26,3 @@ Add a the `fc:frame` in `index.html` to make your root app URL sharable in feeds
     <meta name="fc:frame" content='{"version":"next","imageUrl":"https://placehold.co/900x600.png?text=Frame%20Image","button":{"title":"Open","action":{"type":"launch_frame","name":"App Name","url":"https://app.com"}}}' /> 
   </head>
 ```
-
