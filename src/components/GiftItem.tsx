@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Gift } from '../types';
 import { canUserClaimGift } from '../data/mockData';
+import { useGiftTransaction } from '../services/contractService';
 
 interface GiftItemProps {
   gift: Gift;
@@ -11,6 +12,7 @@ interface GiftItemProps {
 export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = false }) => {
   const { address } = useAccount();
   const [showRecipients, setShowRecipients] = useState(false);
+  const { claimGift, isPending, isConfirming, isConfirmed, hash, error } = useGiftTransaction();
   
   const canClaim = address && canUserClaimGift(gift, address);
   
@@ -35,6 +37,11 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
     );
   };
 
+  const handleClaimGift = async () => {
+    if (!canClaim) return;
+    await claimGift(gift.id);
+  };
+
   return (
     <div className="gift-item">
       <div className="gift-content">
@@ -50,10 +57,34 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
           </div>
           <p className="gift-description">{gift.description}</p>
         </div>
+        
         {showClaimButton && canClaim && (
-          <button className="claim-button">Claim Gift</button>
+          <div className="claim-section">
+            <button 
+              className="claim-button"
+              onClick={handleClaimGift}
+              disabled={isPending || isConfirming || isConfirmed}
+            >
+              {isPending ? 'Confirming...' : isConfirming ? 'Processing...' : isConfirmed ? 'Claimed' : 'Claim Gift'}
+            </button>
+            
+            {hash && (
+              <div className="claim-status">
+                <p>Transaction: {hash}</p>
+                {isConfirming && <p>Claiming gift...</p>}
+                {isConfirmed && <p className="success">Gift claimed successfully!</p>}
+              </div>
+            )}
+            
+            {error && (
+              <div className="claim-error">
+                Error: {error.message}
+              </div>
+            )}
+          </div>
         )}
       </div>
+      
       <div className="gift-nft">
         <img src={gift.nftImage} alt="Gift NFT" />
       </div>

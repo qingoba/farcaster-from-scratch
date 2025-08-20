@@ -180,8 +180,37 @@
   transition: background-color 0.2s;
 }
 
-.claim-button:hover {
+.claim-button:hover:not(:disabled) {
   background: #0056b3;
+}
+
+.claim-button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.claim-section {
+  margin-top: 0.75rem;
+}
+
+.claim-status {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.claim-status .success {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.claim-error {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  color: #721c24;
+  font-size: 0.875rem;
 }
 
 /* Compact gift list for mine tab */

@@ -124,11 +124,19 @@ export const mockHistoricGifts: Gift[] = [
 
 export const canUserClaimGift = (gift: Gift, userAddress: string): boolean => {
   if (gift.isClaimed) return false;
+  
+  // Everyone gifts - anyone can claim
   if (gift.to === 'everyone') {
     return gift.limit ? gift.claimed < gift.limit : true;
   }
+  
+  // Specific recipients - check if user is in recipients list
   if (gift.recipients && gift.recipients.length > 0) {
-    return gift.recipients.includes(userAddress);
+    return gift.recipients.some(recipient => 
+      recipient.toLowerCase() === userAddress.toLowerCase()
+    );
   }
-  return gift.to === userAddress;
+  
+  // Single recipient - check direct match
+  return gift.to.toLowerCase() === userAddress.toLowerCase();
 };

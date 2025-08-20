@@ -45,8 +45,19 @@ export const useGiftTransaction = () => {
     });
   };
 
+  const claimGift = async (presentId: string) => {
+    // Call unwrapPresent contract function
+    writeContract({
+      address: PRESENT_CONTRACT_ADDRESS as `0x${string}`,
+      abi: presentAbi,
+      functionName: 'unwrapPresent',
+      args: [presentId as `0x${string}`],
+    });
+  };
+
   return {
     sendGift,
+    claimGift,
     isPending,
     isConfirming,
     isConfirmed,
