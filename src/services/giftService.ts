@@ -52,14 +52,18 @@ export class GiftService {
     }
 
     try {
-      // TODO: Implement historic gifts fetching (UnwrapPresent events)
-      console.log('⚠️ Historic gifts fetching not implemented yet, using mock data');
+      console.log('🌐 Fetching historic gifts from blockchain...');
+      const gifts = await blockchainService.fetchHistoricGifts();
       
-      console.log(`📥 Using ${mockHistoricGifts.length} mock historic gifts`);
-      this.historicGiftsCache = mockHistoricGifts;
-      return mockHistoricGifts;
+      console.log(`📥 Received ${gifts.length} historic gifts from blockchain`);
+      
+      this.historicGiftsCache = gifts;
+      this.lastFetchTime = Date.now();
+      
+      return gifts;
     } catch (error) {
-      console.error('💥 Failed to fetch historic gifts:', error);
+      console.error('💥 Failed to fetch historic gifts, using mock data:', error);
+      console.log(`📥 Using ${mockHistoricGifts.length} mock historic gifts`);
       return mockHistoricGifts;
     }
   }

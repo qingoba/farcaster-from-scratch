@@ -240,6 +240,84 @@ export class BlockchainService {
       return [];
     }
   }
+
+  // Fetch historic gifts (unwrapped presents)
+  async fetchHistoricGifts(): Promise<Gift[]> {
+    try {
+      console.log('📚 === STARTING HISTORIC GIFTS FETCH ===');
+      
+      const events = await this.fetchWrapPresentEvents();
+      
+      if (events.length === 0) {
+        console.log('⚠️ No WrapPresent events found, returning empty array');
+        return [];
+      }
+      
+      console.log(`🔄 Processing ${events.length} events to get present details...`);
+      
+      // Get present details for all events in parallel
+      const presentPromises = events.map(async (event, index) => {
+        console.log(`📦 Processing event ${index + 1}/${events.length}: ${event.presentId}`);
+        
+        const details = await this.getPresentDetails(event.presentId);
+        if (!details) {
+          console.log(`❌ Failed to get details for present ${event.presentId}`);
+          return null;
+        }
+        
+        // Only include unwrapped, taken back, or expired presents
+        if (details.status === 0) {
+          console.log(`⏭️ Skipping present ${event.presentId} - status: ${details.status} (still active)`);
+          return null;
+        }
+        
+        const nftImage = await this.getNFTImage(event.presentId);
+        const totalValue = this.calculateTotalValue(details.content);
+        
+        const gift: Gift = {
+          id: event.presentId,
+          title: details.title || 'Untitled Gift',
+          from: details.sender,
+          to: details.recipients.length === 0 ? 'everyone' : details.recipients[0],
+          recipients: details.recipients,
+          amount: totalValue,
+          description: details.description || '',
+          limit: details.recipients.length === 0 ? undefined : details.recipients.length,
+          claimed: details.recipients.length === 0 ? 1 : details.recipients.length, // Assume fully claimed
+          isClaimed: true,
+          nftImage,
+          createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
+        };
+
+        console.log(`✅ Created historic gift object:`, {
+          id: gift.id.slice(0, 10) + '...',
+          title: gift.title,
+          amount: gift.amount,
+          status: details.status
+        });
+
+        return gift;
+      });
+      
+      const presents = await Promise.all(presentPromises);
+      const validPresents = presents.filter(p => p !== null) as Gift[];
+      
+      console.log(`📊 Valid historic presents found: ${validPresents.length}`);
+      
+      // Sort by amount (descending) and take top 50
+      const sortedPresents = validPresents
+        .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount))
+        .slice(0, 50);
+      
+      console.log(`📚 === HISTORIC GIFTS FETCH COMPLETED: ${sortedPresents.length} gifts ===`);
+      
+      return sortedPresents;
+        
+    } catch (error) {
+      console.error('💥 Critical error in fetchHistoricGifts:', error);
+      return [];
+    }
+  }
 }
 
 export const blockchainService = new BlockchainService();
