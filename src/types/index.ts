@@ -3,6 +3,7 @@ export interface Gift {
   title: string;
   from: string;
   to: string | 'everyone';
+  recipients?: string[];
   amount: string;
   description: string;
   limit?: number;

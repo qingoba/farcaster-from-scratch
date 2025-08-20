@@ -182,6 +182,7 @@ export class BlockchainService {
           return null;
         }
         
+        // 目前来说, status == 0 表示 active, 暂时只根据状态来考虑
         if (details.status !== 0) {
           console.log(`⏭️ Skipping present ${event.presentId} - status: ${details.status} (not active)`);
           return null;
@@ -195,6 +196,7 @@ export class BlockchainService {
           title: details.title || 'Untitled Gift',
           from: details.sender,
           to: details.recipients.length === 0 ? 'everyone' : details.recipients[0],
+          recipients: details.recipients,
           amount: totalValue,
           description: details.description || '',
           limit: details.recipients.length === 0 ? undefined : details.recipients.length,

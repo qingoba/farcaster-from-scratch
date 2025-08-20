@@ -492,6 +492,75 @@
   background: #218838;
 }
 
+/* Recipients */
+.recipients-clickable {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.recipients-clickable:hover {
+  color: #0056b3;
+}
+
+.recipients-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.recipients-content {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 300px;
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.recipients-content h4 {
+  margin: 0 0 1rem 0;
+  color: #212529;
+}
+
+.recipients-list {
+  margin-bottom: 1rem;
+}
+
+.recipient-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+.recipient-item:last-child {
+  border-bottom: none;
+}
+
+.recipients-content button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.recipients-content button:hover {
+  background: #545b62;
+}
+
 /* Empty State */
 .empty-state {
   text-align: center;

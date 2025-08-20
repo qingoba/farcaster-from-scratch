@@ -1,6 +1,6 @@
 import { Gift } from '../types';
 import { blockchainService } from './blockchain';
-import { mockGifts } from '../data/mockData';
+import { mockGifts, mockHistoricGifts } from '../data/mockData';
 
 export class GiftService {
   private liveGiftsCache: Gift[] = [];
@@ -54,14 +54,13 @@ export class GiftService {
     try {
       // TODO: Implement historic gifts fetching (UnwrapPresent events)
       console.log('⚠️ Historic gifts fetching not implemented yet, using mock data');
-      const historicGifts = mockGifts.filter(gift => gift.isClaimed);
       
-      console.log(`📥 Using ${historicGifts.length} mock historic gifts`);
-      this.historicGiftsCache = historicGifts;
-      return historicGifts;
+      console.log(`📥 Using ${mockHistoricGifts.length} mock historic gifts`);
+      this.historicGiftsCache = mockHistoricGifts;
+      return mockHistoricGifts;
     } catch (error) {
       console.error('💥 Failed to fetch historic gifts:', error);
-      return mockGifts.filter(gift => gift.isClaimed);
+      return mockHistoricGifts;
     }
   }
 
@@ -101,11 +100,16 @@ export class GiftService {
       claimable: allGifts.filter(gift => 
         !gift.isClaimed && (
           gift.to === userAddress || 
-          (gift.to === 'everyone' && gift.limit && gift.claimed < gift.limit)
+          (gift.to === 'everyone' && gift.limit && gift.claimed < gift.limit) ||
+          (gift.recipients && gift.recipients.includes(userAddress))
         )
       ),
       received: allGifts.filter(gift => 
-        gift.isClaimed && (gift.to === userAddress || gift.to === 'everyone')
+        gift.isClaimed && (
+          gift.to === userAddress || 
+          gift.to === 'everyone' ||
+          (gift.recipients && gift.recipients.includes(userAddress))
+        )
       ),
       sent: allGifts.filter(gift => gift.from === userAddress)
     };

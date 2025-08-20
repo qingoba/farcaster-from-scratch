@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Gift } from '../types';
 import { canUserClaimGift } from '../data/mockData';
@@ -10,12 +10,29 @@ interface GiftItemProps {
 
 export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = false }) => {
   const { address } = useAccount();
+  const [showRecipients, setShowRecipients] = useState(false);
   
   const canClaim = address && canUserClaimGift(gift, address);
   
   const formatAddress = (addr: string) => {
     if (addr === 'everyone') return 'Everyone';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  const formatRecipients = () => {
+    if (gift.to === 'everyone') return 'Everyone';
+    if (!gift.recipients || gift.recipients.length <= 1) {
+      return formatAddress(gift.to);
+    }
+    const remaining = gift.recipients.length - 1;
+    return (
+      <span 
+        className="recipients-clickable" 
+        onClick={() => setShowRecipients(true)}
+      >
+        {formatAddress(gift.recipients[0])} and {remaining} more
+      </span>
+    );
   };
 
   return (
@@ -25,7 +42,7 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
         <div className="gift-details">
           <div className="gift-info">
             <span className="gift-from">From: {formatAddress(gift.from)}</span>
-            <span className="gift-to">To: {formatAddress(gift.to)}</span>
+            <span className="gift-to">To: {formatRecipients()}</span>
             <span className="gift-amount">{gift.amount} ETH</span>
             {gift.limit && (
               <span className="gift-limit">Limit: {gift.claimed}/{gift.limit}</span>
@@ -40,6 +57,22 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
       <div className="gift-nft">
         <img src={gift.nftImage} alt="Gift NFT" />
       </div>
+      
+      {showRecipients && gift.recipients && gift.recipients.length > 1 && (
+        <div className="recipients-modal" onClick={() => setShowRecipients(false)}>
+          <div className="recipients-content" onClick={e => e.stopPropagation()}>
+            <h4>Recipients ({gift.recipients.length})</h4>
+            <div className="recipients-list">
+              {gift.recipients.map((recipient, index) => (
+                <div key={index} className="recipient-item">
+                  {formatAddress(recipient)}
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setShowRecipients(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
