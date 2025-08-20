@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
+import { useAccount } from 'wagmi';
+import { NewGiftForm } from '../types';
+import { SUPPORTED_TOKENS, ETH_TOKEN } from '../services/tokens';
+import { useTokenBalance } from '../services/tokenService';
 
 export const NewTab: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const { isConnected } = useAccount();
+  
+  const [formData, setFormData] = useState<NewGiftForm>({
     title: '',
-    to: '',
+    recipientType: 'specific',
+    recipients: [''],
+    token: ETH_TOKEN,
     amount: '',
-    description: '',
-    limit: ''
+    description: ''
   });
+
+  const tokenBalance = useTokenBalance(formData.token);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,14 +24,63 @@ export const NewTab: React.FC = () => {
     console.log('Sending gift:', formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
+  const handleTitleChange = (value: string) => {
+    setFormData(prev => ({ ...prev, title: value }));
+  };
+
+  const handleRecipientTypeChange = (type: 'specific' | 'everyone') => {
+    setFormData(prev => ({ 
+      ...prev, 
+      recipientType: type,
+      recipients: type === 'everyone' ? [] : ['']
     }));
   };
 
-  const isEveryoneGift = formData.to.toLowerCase() === 'everyone';
+  const handleRecipientChange = (index: number, value: string) => {
+    const newRecipients = [...formData.recipients];
+    newRecipients[index] = value;
+    setFormData(prev => ({ ...prev, recipients: newRecipients }));
+  };
+
+  const addRecipient = () => {
+    setFormData(prev => ({ 
+      ...prev, 
+      recipients: [...prev.recipients, ''] 
+    }));
+  };
+
+  const removeRecipient = (index: number) => {
+    if (formData.recipients.length > 1) {
+      const newRecipients = formData.recipients.filter((_, i) => i !== index);
+      setFormData(prev => ({ ...prev, recipients: newRecipients }));
+    }
+  };
+
+  const handleTokenChange = (tokenAddress: string) => {
+    const token = SUPPORTED_TOKENS.find(t => t.address === tokenAddress);
+    if (token) {
+      setFormData(prev => ({ ...prev, token }));
+    }
+  };
+
+  const handleAmountChange = (value: string) => {
+    setFormData(prev => ({ ...prev, amount: value }));
+  };
+
+  const handleDescriptionChange = (value: string) => {
+    setFormData(prev => ({ ...prev, description: value }));
+  };
+
+  if (!isConnected) {
+    return (
+      <div className="new-tab">
+        <div className="connect-prompt">
+          <h2>Connect Wallet</h2>
+          <p>Please connect your wallet to send gifts</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="new-tab">
@@ -34,65 +92,108 @@ export const NewTab: React.FC = () => {
           <input
             type="text"
             id="title"
-            name="title"
             value={formData.title}
-            onChange={handleChange}
+            onChange={(e) => handleTitleChange(e.target.value)}
             placeholder="Enter gift title"
             required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="to">Send To</label>
-          <input
-            type="text"
-            id="to"
-            name="to"
-            value={formData.to}
-            onChange={handleChange}
-            placeholder="Address or 'everyone'"
-            required
-          />
+          <label>Send To</label>
+          <div className="recipient-type-selector">
+            <button
+              type="button"
+              className={formData.recipientType === 'specific' ? 'active' : ''}
+              onClick={() => handleRecipientTypeChange('specific')}
+            >
+              Specific Recipients
+            </button>
+            <button
+              type="button"
+              className={formData.recipientType === 'everyone' ? 'active' : ''}
+              onClick={() => handleRecipientTypeChange('everyone')}
+            >
+              Everyone
+            </button>
+          </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="amount">Amount (ETH)</label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            placeholder="0.1"
-            step="0.001"
-            min="0"
-            required
-          />
-        </div>
-
-        {isEveryoneGift && (
+        {formData.recipientType === 'specific' && (
           <div className="form-group">
-            <label htmlFor="limit">Limit (number of recipients)</label>
-            <input
-              type="number"
-              id="limit"
-              name="limit"
-              value={formData.limit}
-              onChange={handleChange}
-              placeholder="10"
-              min="1"
-              required
-            />
+            <label>Recipients</label>
+            <div className="recipients-list">
+              {formData.recipients.map((recipient, index) => (
+                <div key={index} className="recipient-input-group">
+                  <input
+                    type="text"
+                    value={recipient}
+                    onChange={(e) => handleRecipientChange(index, e.target.value)}
+                    placeholder="0x..."
+                    required
+                  />
+                  {formData.recipients.length > 1 && (
+                    <button
+                      type="button"
+                      className="remove-recipient"
+                      onClick={() => removeRecipient(index)}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                className="add-recipient"
+                onClick={addRecipient}
+              >
+                + Add Recipient
+              </button>
+            </div>
           </div>
         )}
+
+        <div className="form-group">
+          <label>Amount</label>
+          <div className="amount-input-group">
+            <select
+              className="token-selector"
+              value={formData.token.address}
+              onChange={(e) => handleTokenChange(e.target.value)}
+            >
+              {SUPPORTED_TOKENS.map(token => (
+                <option key={token.address} value={token.address}>
+                  {token.symbol}
+                </option>
+              ))}
+            </select>
+            <div className="amount-input-wrapper">
+              <input
+                type="number"
+                className="amount-input"
+                value={formData.amount}
+                onChange={(e) => handleAmountChange(e.target.value)}
+                placeholder={tokenBalance && !formData.amount ? `Balance: ${tokenBalance.formatted}` : "0.0"}
+                step="0.000001"
+                min="0"
+                required
+              />
+              {tokenBalance && formData.amount && parseFloat(formData.amount) > parseFloat(tokenBalance.balance) / Math.pow(10, formData.token.decimals) && (
+                <div className="amount-error">
+                  Insufficient balance
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <textarea
             id="description"
-            name="description"
             value={formData.description}
-            onChange={handleChange}
+            onChange={(e) => handleDescriptionChange(e.target.value)}
             placeholder="Add a message to your gift"
             rows={3}
           />

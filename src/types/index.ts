@@ -19,6 +19,28 @@ export interface User {
   avatar: string;
 }
 
+export interface Token {
+  address: string;
+  symbol: string;
+  name: string;
+  decimals: number;
+}
+
+export interface NewGiftForm {
+  title: string;
+  recipientType: 'specific' | 'everyone';
+  recipients: string[];
+  token: Token;
+  amount: string;
+  description: string;
+}
+
+export interface TokenBalance {
+  token: Token;
+  balance: string;
+  formatted: string;
+}
+
 export type TabType = 'explore' | 'new' | 'mine';
 export type ExploreMode = 'live' | 'historic';
 export type MineTab = 'claimable' | 'received' | 'sent';
