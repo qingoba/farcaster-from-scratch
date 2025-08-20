@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi';
 import { NewGiftForm } from '../types';
 import { SUPPORTED_TOKENS, ETH_TOKEN } from '../services/tokens';
 import { useTokenBalance } from '../services/tokenService';
+import { useGiftTransaction } from '../services/contractService';
 
 export const NewTab: React.FC = () => {
   const { isConnected } = useAccount();
@@ -17,11 +18,24 @@ export const NewTab: React.FC = () => {
   });
 
   const tokenBalance = useTokenBalance(formData.token);
+  const { sendGift, isPending, isConfirming, isConfirmed, hash, error } = useGiftTransaction();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement contract interaction
-    console.log('Sending gift:', formData);
+    
+    // Validate form
+    if (!formData.title.trim()) return;
+    if (!formData.amount || parseFloat(formData.amount) <= 0) return;
+    if (formData.recipientType === 'specific' && !formData.recipients.some(r => r.trim())) return;
+    
+    // Check balance
+    if (tokenBalance) {
+      const inputAmount = parseFloat(formData.amount);
+      const availableBalance = parseFloat(tokenBalance.balance) / Math.pow(10, formData.token.decimals);
+      if (inputAmount > availableBalance) return;
+    }
+
+    await sendGift(formData);
   };
 
   const handleTitleChange = (value: string) => {
@@ -199,9 +213,27 @@ export const NewTab: React.FC = () => {
           />
         </div>
 
-        <button type="submit" className="submit-button">
-          Send Gift
+        <button 
+          type="submit" 
+          className="submit-button"
+          disabled={isPending || isConfirming}
+        >
+          {isPending ? 'Confirming...' : isConfirming ? 'Processing...' : 'Send Gift'}
         </button>
+
+        {hash && (
+          <div className="transaction-status">
+            <p>Transaction Hash: {hash}</p>
+            {isConfirming && <p>Waiting for confirmation...</p>}
+            {isConfirmed && <p className="success">Gift sent successfully!</p>}
+          </div>
+        )}
+
+        {error && (
+          <div className="transaction-error">
+            Error: {error.message}
+          </div>
+        )}
       </form>
     </div>
   );

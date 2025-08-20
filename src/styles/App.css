@@ -655,6 +655,35 @@
   background: #218838;
 }
 
+.submit-button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.transaction-status {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.transaction-status .success {
+  color: #155724;
+  font-weight: 600;
+}
+
+.transaction-error {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  color: #721c24;
+  font-size: 0.875rem;
+}
+
 /* Recipients */
 .recipients-clickable {
   color: #007bff;
