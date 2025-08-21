@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { sdk } from '@farcaster/frame-sdk';
+import React from 'react';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config } from './wagmi';
+import { FarcasterProvider } from './components/FarcasterProvider';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { ExploreTab } from './components/ExploreTab';
@@ -43,16 +43,14 @@ const AppContent: React.FC = () => {
 };
 
 function App() {
-  useEffect(() => {
-    sdk.actions.ready();
-  }, []);
-
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <AppProvider>
-          <AppContent />
-        </AppProvider>
+        <FarcasterProvider>
+          <AppProvider>
+            <AppContent />
+          </AppProvider>
+        </FarcasterProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
