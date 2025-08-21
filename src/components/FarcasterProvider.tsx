@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import sdk from '@farcaster/miniapp-sdk';
 import type { Context } from '@farcaster/miniapp-sdk';
@@ -27,6 +27,11 @@ interface FarcasterProviderProps {
 }
 
 export function FarcasterProvider({ children }: FarcasterProviderProps) {
+  // Call sdk.actions.ready() immediately on mount
+  useEffect(() => {
+    sdk.actions.ready().catch(console.error);
+  }, []);
+
   const farcasterContextQuery = useQuery({
     queryKey: ['farcaster-context'],
     queryFn: async () => {
