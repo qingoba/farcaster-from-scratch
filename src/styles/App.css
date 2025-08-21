@@ -11,7 +11,7 @@
 /* Header */
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 1rem;
   background: white;
@@ -19,6 +19,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  position: relative;
 }
 
 .app-title {
@@ -26,34 +27,41 @@
   font-weight: 600;
   margin: 0;
   color: #495057;
+  text-align: center;
+  flex: 1;
 }
 
 .user-info-button {
+  position: absolute;
+  right: 1rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
   background: #f8f9fa;
   border: 1px solid #dee2e6;
-  border-radius: 20px;
-  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   transition: all 0.2s;
+  padding: 0;
 }
 
 .user-info-button:hover {
   background: #e9ecef;
   border-color: #adb5bd;
+  transform: scale(1.05);
 }
 
 .user-avatar-small {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #dee2e6;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.875rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
 
@@ -99,6 +107,26 @@
 .nav-icon {
   font-size: 1.5rem;
   margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon svg {
+  width: 24px;
+  height: 24px;
+  transition: all 0.2s ease;
+  color: currentColor;
+}
+
+.nav-item:hover .nav-icon svg {
+  transform: scale(1.1);
+  color: #007bff;
+}
+
+.nav-item.active .nav-icon svg {
+  transform: scale(1.15);
+  color: #007bff;
 }
 
 .nav-label {
