@@ -2,6 +2,12 @@
 
 启动: `npm run dev`
 
+在 Farcaster Embed 或手机 App 上显示: 在根目录 index.html 找到如下属性信息, 将 url 字段修改为部署地址(不能是 localhost)
+```
+ <meta name="fc:frame" content='{"version":"next","imageUrl":"https://placehold.co/900x600.png?text=Gift%20Box","button":{"title":"Open Gift Box","action":{"type":"launch_frame","name":"Gift Box","url":"https://respondents-messaging-specials-in.trycloudflare.com","splashImageUrl":"https://placehold.co/900x600.png?text=Gift%20Box","splashBackgroundColor":"#f8f9fa"}}}' />
+```
+
+
 ***
 
 This is a [Vite](https://vitejs.dev) project bootstrapped with [`@farcaster/create-mini-app`](https://github.com/farcasterxyz/miniapps/tree/main/packages/create-mini-app).
