@@ -912,12 +912,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: transparent; /*rgba(255, 255, 255, 0.95);*/
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
+  background: transparent;
+  backdrop-filter: none;
+  border-radius: 0;
   padding: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+  border: none;
 }
 
 .mode-switch, .mine-tabs {
@@ -958,7 +958,7 @@
 
 .refresh-button {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -966,13 +966,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.3);
+  box-shadow: 0 4px 16px rgba(243, 156, 18, 0.3);
   letter-spacing: 0.5px;
 }
 
 .refresh-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+  box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
 }
 
 .refresh-button:disabled {
