@@ -6,8 +6,8 @@ import { metaMask, walletConnect } from "wagmi/connectors";
 const projectId = "3fbb6bba6f1de962d911bb5b5c9dba88";
 
 export const config = createConfig({
-  chains: [base, mainnet, arbitrumSepolia],
-  connectors: [farcasterFrame(), farcasterMiniApp(), metaMask(), walletConnect({projectId})],
+  chains: [arbitrumSepolia, base, mainnet],
+  connectors: [farcasterMiniApp(), farcasterFrame(), metaMask(), walletConnect({projectId})],
   transports: {
     [base.id]: http(),
     [mainnet.id]: http(),
