@@ -76,3 +76,17 @@ https://github.com/qingoba/GiftCaster
 ## 项目演示
 
 https://drive.google.com/drive/folders/1VNooz4YFL-qS8WGYKbd6FpOhhzsv5MLF?usp=sharing
+
+## Getting Started
+合约代码位于 `src/contract-code`, 其余为 Dapp 代码
+
+启动 DApp 的命令:
+
+```
+npm install
+npm run dev
+```
+如果要在 Farcaster Embed 或手机 App 上显示: 在根目录 index.html 找到如下属性信息, 将 url 字段修改为部署地址(不能是 localhost)
+```
+<meta name="fc:frame" content='{"version":"next","imageUrl":"https://placehold.co/900x600.png?text=Gift%20Box","button":{"title":"Open Gift Box","action":{"type":"launch_frame","name":"Gift Box","url":"https://respondents-messaging-specials-in.trycloudflare.com","splashImageUrl":"https://placehold.co/900x600.png?text=Gift%20Box","splashBackgroundColor":"#f8f9fa"}}}' />
+```
