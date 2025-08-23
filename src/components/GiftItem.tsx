@@ -18,6 +18,16 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
   
   const canClaim = address && canUserClaimGift(gift, address);
   
+  // 为每个礼物分配一个颜色变体
+  const getColorVariant = (giftId: string) => {
+    const hash = giftId.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    const variantIndex = Math.abs(hash) % 5 + 1;
+    return `variant-${variantIndex}`;
+  };
+  
   const formatAddress = (addr: string) => {
     if (addr === 'everyone') return 'Everyone';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -56,7 +66,7 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
   };
 
   return (
-    <div className="gift-item">
+    <div className={`gift-item ${getColorVariant(gift.id)}`}>
       <div className="gift-content">
         <h3 className="gift-title">{gift.title}</h3>
         <div className="gift-details">

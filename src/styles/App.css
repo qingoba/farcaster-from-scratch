@@ -7,19 +7,12 @@
   margin: 0 auto;
   position: relative;
   overflow: hidden;
+  background: transparent;
 }
 
-/* 精美几何图案背景墙 */
+/* 移除静态背景，使用动态背景组件 */
 .app::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #eaddc2;
-  background-image: url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M81.28 88H68.413l19.298 19.298L81.28 88zm2.107 0h13.226L90 107.838 83.387 88zm15.334 0h12.866l-19.298 19.298L98.72 88zm-32.927-2.207L73.586 78h32.827l.5.5 7.294 7.293L115.414 87l-24.707 24.707-.707.707L64.586 87l1.207-1.207zm2.62.207L74 80.414 79.586 86H68.414zm16 0L90 80.414 95.586 86H84.414zm16 0L106 80.414 111.586 86h-11.172zm-8-6h11.173L98 85.586 92.414 80zM82 85.586L87.586 80H76.414L82 85.586zM17.414 0L.707 16.707 0 17.414V0h17.414zM4.28 0L0 12.838V0h4.28zm10.306 0L2.288 12.298 6.388 0h8.198zM180 17.414L162.586 0H180v17.414zM165.414 0l12.298 12.298L173.612 0h-8.198zM180 12.838L175.72 0H180v12.838zM0 163h16.413l.5.5 7.294 7.293L25.414 172l-8 8H0v-17zm0 10h6.613l-2.334 7H0v-7zm14.586 7l7-7H8.72l-2.333 7h8.2zM0 165.414L5.586 171H0v-5.586zM10.414 171L16 165.414 21.586 171H10.414zm-8-6h11.172L8 170.586 2.414 165zM180 163h-16.413l-7.794 7.793-1.207 1.207 8 8H180v-17zm-14.586 17l-7-7h12.865l2.333 7h-8.2zM180 173h-6.613l2.334 7H180v-7zm-21.586-2l5.586-5.586 5.586 5.586h-11.172zM180 165.414L174.414 171H180v-5.586zm-8 5.172l5.586-5.586h-11.172l5.586 5.586zM152.933 25.653l1.414 1.414-33.94 33.942-1.416-1.416 33.943-33.94zm1.414 127.28l-1.414 1.414-33.942-33.94 1.416-1.416 33.94 33.943zm-127.28 1.414l-1.414-1.414 33.94-33.942 1.416 1.416-33.943 33.94zm-1.414-127.28l1.414-1.414 33.942 33.94-1.416 1.416-33.94-33.943zM0 85c2.21 0 4 1.79 4 4s-1.79 4-4 4v-8zm180 0c-2.21 0-4 1.79-4 4s1.79 4 4 4v-8zM94 0c0 2.21-1.79 4-4 4s-4-1.79-4-4h8zm0 180c0-2.21-1.79-4-4-4s-4 1.79-4 4h8z' fill='%23c0963d' fill-opacity='0.47' fill-rule='evenodd'/%3E%3C/svg%3E");
-  z-index: -2;
+  display: none;
 }
 
 /* 移除多余的背景层 */
@@ -126,19 +119,24 @@
 
 .gift-item {
   position: relative;
-  background: rgba(255, 255, 255, 0.23);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 53, 0.15) 0%,
+    rgba(255, 140, 80, 0.15) 25%,
+    rgba(255, 165, 100, 0.15) 50%,
+    rgba(255, 190, 120, 0.15) 75%,
+    rgba(255, 215, 140, 0.15) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 107, 53, 0.3);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   overflow: hidden;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 38px 19px rgba(255, 255, 255, 0.19);
+    0 12px 40px rgba(255, 107, 53, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.1),
+    inset 0 0 42px 21px rgba(255, 107, 53, 0.05);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -177,14 +175,121 @@
 }
 
 .gift-item:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-8px) scale(1.03);
   box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 0 42px 21px rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.28);
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.2),
+    inset 0 0 50px 25px rgba(255, 107, 53, 0.1),
+    0 0 30px rgba(255, 107, 53, 0.4);
+  border: 1px solid rgba(255, 107, 53, 0.5);
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 53, 0.25) 0%,
+    rgba(255, 140, 80, 0.25) 25%,
+    rgba(255, 165, 100, 0.25) 50%,
+    rgba(255, 190, 120, 0.25) 75%,
+    rgba(255, 215, 140, 0.25) 100%);
+}
+
+/* 礼物格子颜色变体 - 橙色系 */
+.gift-item.variant-1 {
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 53, 0.2) 0%,
+    rgba(255, 140, 80, 0.2) 50%,
+    rgba(255, 165, 100, 0.2) 100%);
+}
+
+.gift-item.variant-1:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 107, 53, 0.3) 0%,
+    rgba(255, 140, 80, 0.3) 50%,
+    rgba(255, 165, 100, 0.3) 100%);
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.2),
+    inset 0 0 50px 25px rgba(255, 107, 53, 0.1),
+    0 0 30px rgba(255, 107, 53, 0.6);
+}
+
+.gift-item.variant-2 {
+  background: linear-gradient(135deg, 
+    rgba(255, 140, 80, 0.2) 0%,
+    rgba(255, 165, 100, 0.2) 50%,
+    rgba(255, 190, 120, 0.2) 100%);
+}
+
+.gift-item.variant-2:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 140, 80, 0.3) 0%,
+    rgba(255, 165, 100, 0.3) 50%,
+    rgba(255, 190, 120, 0.3) 100%);
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.2),
+    inset 0 0 50px 25px rgba(255, 107, 53, 0.1),
+    0 0 30px rgba(255, 140, 80, 0.6);
+}
+
+.gift-item.variant-3 {
+  background: linear-gradient(135deg, 
+    rgba(255, 165, 100, 0.2) 0%,
+    rgba(255, 190, 120, 0.2) 50%,
+    rgba(255, 215, 140, 0.2) 100%);
+}
+
+.gift-item.variant-3:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 165, 100, 0.3) 0%,
+    rgba(255, 190, 120, 0.3) 50%,
+    rgba(255, 215, 140, 0.3) 100%);
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.2),
+    inset 0 0 50px 25px rgba(255, 107, 53, 0.1),
+    0 0 30px rgba(255, 165, 100, 0.6);
+}
+
+.gift-item.variant-4 {
+  background: linear-gradient(135deg, 
+    rgba(255, 190, 120, 0.2) 0%,
+    rgba(255, 215, 140, 0.2) 50%,
+    rgba(255, 228, 160, 0.2) 100%);
+}
+
+.gift-item.variant-4:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 190, 120, 0.3) 0%,
+    rgba(255, 215, 140, 0.3) 50%,
+    rgba(255, 228, 160, 0.3) 100%);
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.2),
+    inset 0 0 50px 25px rgba(255, 107, 53, 0.1),
+    0 0 30px rgba(255, 190, 120, 0.6);
+}
+
+.gift-item.variant-5 {
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 140, 0.2) 0%,
+    rgba(255, 228, 160, 0.2) 50%,
+    rgba(255, 240, 180, 0.2) 100%);
+}
+
+.gift-item.variant-5:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 140, 0.3) 0%,
+    rgba(255, 228, 160, 0.3) 50%,
+    rgba(255, 240, 180, 0.3) 100%);
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 107, 53, 0.2),
+    inset 0 0 50px 25px rgba(255, 107, 53, 0.1),
+    0 0 30px rgba(255, 215, 140, 0.6);
 }
 
 /* 玻璃效果的高光始终可见 */
@@ -748,35 +853,57 @@
 .connect-prompt {
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 200, 150, 0.3);
   backdrop-filter: blur(15px);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.2);
+  border: 1px solid rgba(255, 107, 53, 0.3);
 }
 
 .connect-prompt h2 {
-  color: #ff6b35;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 1rem;
   background: none;
-  -webkit-text-fill-color: #ff6b35;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .connect-prompt p {
-  color: #5a6c7d;
+  color: rgba(255, 255, 255, 0.8);
   margin: 0;
   font-size: 1.1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .gift-form {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 2.5rem;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, 
+    rgba(255, 220, 180, 0.3) 0%, 
+    rgba(255, 200, 150, 0.35) 25%, 
+    rgba(255, 180, 120, 0.3) 50%, 
+    rgba(255, 160, 90, 0.35) 100%);
+  backdrop-filter: blur(25px);
+  border-radius: 32px;
+  padding: 3rem;
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 53, 0.2),
+    0 0 0 1px rgba(255, 107, 53, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 107, 53, 0.3);
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.gift-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  z-index: 1;
 }
 
 .form-group {
@@ -787,9 +914,12 @@
   display: block;
   margin-bottom: 0.75rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
   letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
 }
 
 .form-group input,
@@ -797,27 +927,37 @@
 .form-group select {
   width: 100%;
   padding: 1rem 1.25rem;
-  border: 2px solid rgba(255, 107, 53, 0.2);
-  border-radius: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
   font-size: 1rem;
   transition: all 0.3s ease;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
+  color: rgba(255, 255, 255, 0.95);
+  position: relative;
+  z-index: 2;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #ff6b35;
-  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
-  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 
+    0 0 0 4px rgba(255, 255, 255, 0.1),
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #a0aec0;
+  color: rgba(255, 255, 255, 0.6);
   font-style: italic;
 }
 
@@ -1002,22 +1142,39 @@
 .submit-button {
   width: 100%;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 16px;
+  background: linear-gradient(135deg, 
+    rgba(219, 221, 187, 0.9) 0%, 
+    rgba(164, 149, 106, 0.9) 25%, 
+    rgba(223, 213, 135, 0.9) 50%, 
+    rgba(159, 108, 39, 0.9) 100%);
+  color: rgba(0, 0, 0, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 24px;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
 .submit-button:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, 
+    rgba(219, 221, 187, 0.9) 0%, 
+    rgba(164, 149, 106, 0.9) 25%, 
+    rgba(223, 213, 135, 0.9) 50%, 
+    rgba(159, 108, 39, 0.9) 100%);
 }
 
 .submit-button:disabled {
@@ -1243,20 +1400,21 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* 3D礼物打开动画 - 全屏中心显示 */
+/* 3D礼物打开动画 - 主页面中心显示 */
 .gift-animation-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1000;
   animation: fadeIn 0.4s ease-in-out;
+  border-radius: inherit;
 }
 
 .gift-animation-container {
@@ -1265,42 +1423,43 @@
   flex-direction: column;
   align-items: center;
   animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: scale(0.8);
 }
 
 .gift-box {
   position: relative;
-  width: 300px;
-  height: 300px;
-  perspective: 1200px;
+  width: 200px;
+  height: 200px;
+  perspective: 1000px;
   transform-style: preserve-3d;
 }
 
 .gift-box-base {
-  width: 300px;
-  height: 225px;
+  width: 200px;
+  height: 150px;
   background: linear-gradient(135deg, #ff6b35 0%, #c0963d 100%);
-  border: 6px solid #8b4513;
-  border-radius: 25px;
+  border: 4px solid #8b4513;
+  border-radius: 18px;
   position: absolute;
   bottom: 0;
   box-shadow: 
-    0 15px 45px rgba(0, 0, 0, 0.4),
-    inset 0 8px 0 rgba(255, 255, 255, 0.25);
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    inset 0 6px 0 rgba(255, 255, 255, 0.25);
   transform: rotateX(-10deg);
 }
 
 .gift-box-lid {
-  width: 330px;
-  height: 120px;
+  width: 220px;
+  height: 80px;
   background: linear-gradient(135deg, #40e0ff 0%, #ff6b35 100%);
-  border: 6px solid #8b4513;
-  border-radius: 25px 25px 15px 15px;
+  border: 4px solid #8b4513;
+  border-radius: 18px 18px 12px 12px;
   position: absolute;
-  top: 60px;
-  left: -15px;
+  top: 40px;
+  left: -10px;
   box-shadow: 
-    0 8px 30px rgba(0, 0, 0, 0.3),
-    inset 0 5px 0 rgba(255, 255, 255, 0.35);
+    0 6px 25px rgba(0, 0, 0, 0.3),
+    inset 0 4px 0 rgba(255, 255, 255, 0.35);
   transform-origin: bottom center;
   animation: giftLidOpen 3s ease-in-out 0.5s forwards;
   transform: rotateX(-5deg);

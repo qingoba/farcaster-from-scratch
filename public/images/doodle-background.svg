@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gift-focused doodle background -->
+  <defs>
+    <g id="giftDoodles" stroke="white" stroke-opacity="0.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <!-- Large gift box -->
+      <g>
+        <rect x="4" y="6" width="24" height="20" rx="3"/>
+        <path d="M4 16h24M16 6v20"/>
+        <!-- Gift bow on top -->
+        <path d="M10 6s3-8 6 0M22 6s-3-8-6 0"/>
+        <ellipse cx="16" cy="2" rx="3" ry="1.5" fill="white" fill-opacity="0.2"/>
+        <!-- Gift tag -->
+        <rect x="20" y="10" width="4" height="3" rx="0.5" fill="white" fill-opacity="0.15"/>
+        <path d="M24 11.5h2"/>
+      </g>
+      
+      <!-- Small gift box -->
+      <g>
+        <rect x="6" y="8" width="16" height="14" rx="2"/>
+        <path d="M6 15h16M14 8v14"/>
+        <!-- Small bow -->
+        <path d="M11 8s2-5 3 0M17 8s-2-5-3 0"/>
+        <circle cx="14" cy="4" r="1" fill="white" fill-opacity="0.2"/>
+        <!-- Heart decoration -->
+        <path d="M14 18 C12 16 10 17 11 19 C12 20 14 21 14 21 C14 21 16 20 17 19 C18 17 16 16 14 18" stroke-width="2"/>
+      </g>
+      
+      <!-- Gift bag -->
+      <g>
+        <path d="M8 10 L8 24 L20 24 L20 10 L18 8 L10 8 Z"/>
+        <!-- Bag handles -->
+        <path d="M10 8 L10 6 L18 6 L18 8"/>
+        <!-- Bag decoration -->
+        <path d="M12 12 L16 12"/>
+        <circle cx="14" cy="16" r="1" fill="white" fill-opacity="0.2"/>
+        <!-- Gift pattern on bag -->
+        <path d="M11 14 L13 14 M15 14 L17 14"/>
+        <path d="M11 18 L13 18 M15 18 L17 18"/>
+      </g>
+      
+      <!-- Present with bow -->
+      <g>
+        <rect x="5" y="10" width="18" height="12" rx="2"/>
+        <path d="M5 16h18"/>
+        <path d="M14 10v12"/>
+        <!-- Large decorative bow -->
+        <ellipse cx="14" cy="13" rx="4" ry="2" fill="white" fill-opacity="0.2"/>
+        <path d="M10 13 Q14 10 18 13 Q14 16 10 13"/>
+        <!-- Bow center -->
+        <circle cx="14" cy="13" r="1" fill="white" fill-opacity="0.25"/>
+      </g>
+      
+      <!-- Gift ribbon -->
+      <path d="M0 -8 Q-4 -4 0 0 Q4 -4 0 -8 M0 0 Q-4 4 0 8 Q4 4 0 8"/>
+      
+      <!-- Stars around gifts -->
+      <path d="M0 -6 l2 4 4 0.5-3 2.5 0.5 4-3.5-2-3.5 2 0.5-4-3-2.5 4-0.5 2-4z"/>
+      
+      <!-- Smaller sparkle -->
+      <path d="M0 -3 l1 2 2 0-1.5 1.5 0.5 2-1.5-1-1.5 1 0.5-2-1.5-1.5 2 0 1-2z"/>
+      
+      <!-- Heart for love/care -->
+      <path d="M0 2 C-3 -2 -6 0 -4 4 C-2 6 0 8 0 8 C0 8 2 6 4 4 C6 0 3 -2 0 2Z"/>
+      
+      <!-- Celebration confetti -->
+      <g>
+        <rect x="-1" y="-1" width="2" height="2" rx="0.5" fill="white" fill-opacity="0.25"/>
+        <rect x="3" y="2" width="1.5" height="1.5" rx="0.3" fill="white" fill-opacity="0.2"/>
+        <circle cx="-2" cy="3" r="0.8" fill="white" fill-opacity="0.22"/>
+      </g>
+    </g>
+    
+    <!-- Create gift-focused variants with different scales/rotations -->
+    <g id="giftVariants">
+      <use href="#giftDoodles" transform="translate(0,0) scale(1)"/>
+      <use href="#giftDoodles" transform="translate(0,0) scale(0.7) rotate(15)"/>
+      <use href="#giftDoodles" transform="translate(0,0) scale(1.3) rotate(-20)"/>
+      <use href="#giftDoodles" transform="translate(0,0) scale(0.9) rotate(45)"/>
+    </g>
+  </defs>
+
+  <!-- Scatter gift doodles across the tile with more density -->
+  <g opacity="1">
+    <!-- Row 1 - Top -->
+    <use href="#giftVariants" transform="translate(40,50)"/>
+    <use href="#giftVariants" transform="translate(140,30)"/>
+    <use href="#giftVariants" transform="translate(240,60)"/>
+    <use href="#giftVariants" transform="translate(340,40)"/>
+    <use href="#giftVariants" transform="translate(440,70)"/>
+    
+    <!-- Row 2 -->
+    <use href="#giftVariants" transform="translate(70,120)"/>
+    <use href="#giftVariants" transform="translate(170,140)"/>
+    <use href="#giftVariants" transform="translate(270,110)"/>
+    <use href="#giftVariants" transform="translate(370,130)"/>
+    <use href="#giftVariants" transform="translate(470,150)"/>
+    
+    <!-- Row 3 -->
+    <use href="#giftVariants" transform="translate(30,200)"/>
+    <use href="#giftVariants" transform="translate(130,220)"/>
+    <use href="#giftVariants" transform="translate(230,190)"/>
+    <use href="#giftVariants" transform="translate(330,210)"/>
+    <use href="#giftVariants" transform="translate(430,230)"/>
+    
+    <!-- Row 4 -->
+    <use href="#giftVariants" transform="translate(80,280)"/>
+    <use href="#giftVariants" transform="translate(180,300)"/>
+    <use href="#giftVariants" transform="translate(280,270)"/>
+    <use href="#giftVariants" transform="translate(380,290)"/>
+    <use href="#giftVariants" transform="translate(480,310)"/>
+    
+    <!-- Row 5 -->
+    <use href="#giftVariants" transform="translate(50,360)"/>
+    <use href="#giftVariants" transform="translate(150,380)"/>
+    <use href="#giftVariants" transform="translate(250,350)"/>
+    <use href="#giftVariants" transform="translate(350,370)"/>
+    <use href="#giftVariants" transform="translate(450,390)"/>
+    
+    <!-- Row 6 - Bottom -->
+    <use href="#giftVariants" transform="translate(20,440)"/>
+    <use href="#giftVariants" transform="translate(120,460)"/>
+    <use href="#giftVariants" transform="translate(220,430)"/>
+    <use href="#giftVariants" transform="translate(320,450)"/>
+    <use href="#giftVariants" transform="translate(420,470)"/>
+  </g>
+
+  <!-- Subtle connecting lines between gifts -->
+  <path d="M0 100 Q256 50 512 100" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  <path d="M0 200 Q256 150 512 200" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  <path d="M0 300 Q256 250 512 300" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  <path d="M0 400 Q256 350 512 400" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+  
+  <!-- Gift celebration sparkles -->
+  <g stroke="white" stroke-opacity="0.2" fill="white" fill-opacity="0.15">
+    <circle cx="100" cy="80" r="2"/>
+    <circle cx="200" cy="160" r="1.5"/>
+    <circle cx="300" cy="240" r="2.5"/>
+    <circle cx="400" cy="320" r="1.8"/>
+    <circle cx="150" cy="400" r="2.2"/>
+  </g>
+</svg>
