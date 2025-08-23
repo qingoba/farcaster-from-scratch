@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 import { arbitrumSepolia } from 'wagmi/chains';
 import { useApp } from '../context/AppContext';
+import { useFarcasterProfile } from '../hooks/useFarcasterProfile';
 
 export const UserMenu: React.FC = () => {
   const { showUserMenu, setShowUserMenu } = useApp();
   const { address, isConnected, chain } = useAccount();
   const { connectors, connect } = useConnect();
   const { disconnect } = useDisconnect();
+  const { profile } = useFarcasterProfile();
   const { switchChain } = useSwitchChain();
   const [showConnectors, setShowConnectors] = useState(false);
   
@@ -40,7 +42,13 @@ export const UserMenu: React.FC = () => {
         {isConnected && address ? (
           <>
             <div className="user-info">
-              <div className="user-avatar-large">👤</div>
+              <div className="user-avatar-large">
+                {profile?.avatar ? (
+                  <img src={profile.avatar} alt="User Avatar" />
+                ) : (
+                  '👤'
+                )}
+              </div>
               <div className="user-details">
                 <div className="address">{formatAddress(address)}</div>
                 <div className="network">
