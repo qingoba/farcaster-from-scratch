@@ -1,7 +1,7 @@
 import { createPublicClient, http } from 'viem';
 import { arbitrumSepolia } from 'viem/chains';
-import wrappedNFTAbi from '../abi/code/abi/raw/WrappedPresentNFT.abi.json';
-import unwrappedNFTAbi from '../abi/code/abi/raw/UnwrappedPresentNFT.abi.json';
+import wrappedNFTAbi from '../abi/raw/WrappedPresentNFT.abi.json';
+import unwrappedNFTAbi from '../abi/raw/UnwrappedPresentNFT.abi.json';
 
 // NFT Contract addresses
 const WRAPPED_NFT_ADDRESS = '0x834D49527c710faBAD5f4f737582afABa8EA3CCD';
