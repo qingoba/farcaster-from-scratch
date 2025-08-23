@@ -4,7 +4,7 @@ import { Gift } from '../types';
 import presentAbi from '../abi/raw/Present.abi.json';
 import { nftService } from './nftService';
 
-const PRESENT_CONTRACT_ADDRESS = '0x5Ee00E5BA73d7ab2fe0B1d9aDa12212CB7ae28f0';
+const PRESENT_CONTRACT_ADDRESS = '0x8cED4381845b1fB450C8D2279ed4c888A38fC08d';
 const BLOCKS_PER_BATCH = 1000000;
 const ONE_WEEK_BLOCKS = 2000000; // Arbitrum ~200w blocks per week
 
@@ -105,7 +105,7 @@ export class BlockchainService {
   }
 
   // Get present details from contract
-  private async getPresentDetails(presentId: string): Promise<PresentData | null> {
+  private async getPresentDetails(presentId: string, userAddress?: string): Promise<PresentData | null> {
     try {
       console.log(`📦 Fetching details for present: ${presentId}`);
       
@@ -135,6 +135,17 @@ export class BlockchainService {
 
       const [sender, title, description, status, expiryAt, distType, claimLimit, claimedCount] = presentInfo;
 
+      // Check if current user has claimed this present
+      let isClaimed = false;
+      if (userAddress) {
+        isClaimed = await publicClient.readContract({
+          address: getAddress(PRESENT_CONTRACT_ADDRESS),
+          abi: presentAbi,
+          functionName: 'claims',
+          args: [presentId, userAddress]
+        }) as boolean;
+      }
+
       const presentData = {
         sender,
         recipients,
@@ -145,7 +156,8 @@ export class BlockchainService {
         expiryAt,
         distType,
         claimLimit,
-        claimedCount
+        claimedCount,
+        isClaimed
       };
 
       console.log(`✅ Got Present Detail ${presentId.slice(0, 10)}... details:`, {
@@ -199,7 +211,7 @@ export class BlockchainService {
   }
 
   // Main function to fetch and process gifts
-  async fetchLiveGifts(): Promise<Gift[]> {
+  async fetchLiveGifts(userAddress?: string): Promise<Gift[]> {
     try {
       console.log('🎁 === STARTING LIVE GIFTS FETCH ===');
       
@@ -216,7 +228,7 @@ export class BlockchainService {
       const presentPromises = events.map(async (event, index) => {
         console.log(`📦 Processing event ${index + 1}/${events.length}: ${event.presentId}`);
         
-        const details = await this.getPresentDetails(event.presentId);
+        const details = await this.getPresentDetails(event.presentId, userAddress);
         if (!details) {
           console.log(`❌ Failed to get details for present ${event.presentId}`);
           return null;
@@ -241,7 +253,7 @@ export class BlockchainService {
           description: details.description || '',
           limit: Number(details.claimLimit),
           claimed: Number(details.claimedCount),
-          isClaimed: false,
+          isClaimed: details.isClaimed, // User-specific claim status
           nftImage,
           createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
         };
@@ -282,7 +294,7 @@ export class BlockchainService {
   }
 
   // Fetch historic gifts (unwrapped presents)
-  async fetchHistoricGifts(): Promise<Gift[]> {
+  async fetchHistoricGifts(userAddress?: string): Promise<Gift[]> {
     try {
       console.log('📚 === STARTING HISTORIC GIFTS FETCH ===');
       
@@ -299,7 +311,7 @@ export class BlockchainService {
       const presentPromises = events.map(async (event, index) => {
         console.log(`📦 Processing event ${index + 1}/${events.length}: ${event.presentId}`);
         
-        const details = await this.getPresentDetails(event.presentId);
+        const details = await this.getPresentDetails(event.presentId, userAddress);
         if (!details) {
           console.log(`❌ Failed to get details for present ${event.presentId}`);
           return null;
@@ -324,7 +336,7 @@ export class BlockchainService {
           description: details.description || '',
           limit: Number(details.claimLimit),
           claimed: Number(details.claimedCount),
-          isClaimed: true,
+          isClaimed: details.isClaimed, // User-specific claim status
           nftImage,
           createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
         };

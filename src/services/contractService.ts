@@ -4,7 +4,7 @@ import { NewGiftForm } from '../types';
 import presentAbi from '../Present.abi';
 import { ETH_TOKEN } from './tokens';
 
-const PRESENT_CONTRACT_ADDRESS = '0x5Ee00E5BA73d7ab2fe0B1d9aDa12212CB7ae28f0';
+const PRESENT_CONTRACT_ADDRESS = '0x8cED4381845b1fB450C8D2279ed4c888A38fC08d';
 
 export interface SendGiftParams {
   recipients: string[];
@@ -36,7 +36,12 @@ export const useGiftTransaction = () => {
     }];
 
     // Distribution type: 1 = equal split, 3 = random split
-    const distributionType = formData.distributionType === 'equal' ? 1 : 3;
+    let distributionType = formData.distributionType === 'equal' ? 1 : 3;
+
+    if (recipients.length != 0 && formData.distributionType === 'equal') {
+      distributionType = 2;
+    }
+      
 
     // Calculate claim limit
     const claimLimit = parseInt(formData.shares);
@@ -55,6 +60,8 @@ export const useGiftTransaction = () => {
         BigInt(claimLimit)
       ],
       value: ethAmount, // Send ETH if needed
+      gas: 500000n, // 500k gas limit
+      gasPrice: 100000000n, // 0.1 gwei
     });
   };
 

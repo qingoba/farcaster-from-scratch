@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useAccount } from 'wagmi';
 import { TabType, ExploreMode, MineTab, Gift } from '../types';
 import { giftService } from '../services/giftService';
 
@@ -28,6 +29,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { address } = useAccount();
   const [activeTab, setActiveTab] = useState<TabType>('explore');
   const [exploreMode, setExploreMode] = useState<ExploreMode>('live');
   const [mineTab, setMineTab] = useState<MineTab>('claimable');
@@ -41,7 +43,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     console.log('🚀 AppContext.fetchGifts() called');
     setLoading(true);
     try {
-      const allGifts = await giftService.getAllGifts();
+      const allGifts = await giftService.getAllGifts(address);
       console.log(`📦 AppContext received ${allGifts.length} gifts`);
       setGifts(allGifts);
     } catch (error) {
@@ -63,7 +65,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     console.log('🎯 AppContext useEffect triggered - initial data fetch');
     fetchGifts();
-  }, []);
+  }, [address]); // Refetch when address changes
 
   const value: AppContextType = {
     activeTab,

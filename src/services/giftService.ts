@@ -16,7 +16,7 @@ export class GiftService {
   }
 
   // Fetch live gifts (unclaimed)
-  async getLiveGifts(): Promise<Gift[]> {
+  async getLiveGifts(userAddress?: string): Promise<Gift[]> {
     console.log('🔴 GiftService.getLiveGifts() called');
     
     if (this.liveGiftsCache.length > 0 && this.isCacheValid()) {
@@ -26,7 +26,7 @@ export class GiftService {
 
     try {
       console.log('🌐 Fetching live gifts from blockchain...');
-      const gifts = await blockchainService.fetchLiveGifts();
+      const gifts = await blockchainService.fetchLiveGifts(userAddress);
       
       console.log(`📥 Received ${gifts.length} live gifts from blockchain`);
       
@@ -43,7 +43,7 @@ export class GiftService {
   }
 
   // Fetch historic gifts (claimed)
-  async getHistoricGifts(): Promise<Gift[]> {
+  async getHistoricGifts(userAddress?: string): Promise<Gift[]> {
     console.log('🟡 GiftService.getHistoricGifts() called');
     
     if (this.historicGiftsCache.length > 0 && this.isCacheValid()) {
@@ -53,7 +53,7 @@ export class GiftService {
 
     try {
       console.log('🌐 Fetching historic gifts from blockchain...');
-      const gifts = await blockchainService.fetchHistoricGifts();
+      const gifts = await blockchainService.fetchHistoricGifts(userAddress);
       
       console.log(`📥 Received ${gifts.length} historic gifts from blockchain`);
       
@@ -69,12 +69,12 @@ export class GiftService {
   }
 
   // Get all gifts (live + historic)
-  async getAllGifts(): Promise<Gift[]> {
+  async getAllGifts(userAddress?: string): Promise<Gift[]> {
     console.log('🔵 GiftService.getAllGifts() called');
     
     const [liveGifts, historicGifts] = await Promise.all([
-      this.getLiveGifts(),
-      this.getHistoricGifts()
+      this.getLiveGifts(userAddress),
+      this.getHistoricGifts(userAddress)
     ]);
     
     const totalGifts = [...liveGifts, ...historicGifts];
