@@ -27,22 +27,19 @@ interface FarcasterProviderProps {
 }
 
 export function FarcasterProvider({ children }: FarcasterProviderProps) {
-  // Call sdk.actions.ready() immediately on mount
-  useEffect(() => {
-    sdk.actions.ready().catch(console.error);
-  }, []);
-
   const farcasterContextQuery = useQuery({
     queryKey: ['farcaster-context'],
     queryFn: async () => {
-      const context = await sdk.context;
       try {
+        const context = await sdk.context;
+        // Call ready() once after SDK is initialized
         await sdk.actions.ready();
+        console.log('Farcaster SDK ready() called successfully');
         return { context, isReady: true };
       } catch (err) {
         console.error('SDK initialization error:', err);
+        return { context: null, isReady: false };
       }
-      return { context, isReady: false };
     },
   });
 
