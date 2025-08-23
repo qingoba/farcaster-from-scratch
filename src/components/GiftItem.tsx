@@ -4,6 +4,7 @@ import { Gift } from '../types';
 import { canUserClaimGift } from '../data/mockData';
 import { useGiftTransaction } from '../services/contractService';
 import { useApp } from '../context/AppContext';
+import { formatAddress as formatAddressWithENS } from '../utils/ensMapping';
 
 interface GiftItemProps {
   gift: Gift;
@@ -47,7 +48,7 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
   
   const formatAddress = (addr: string) => {
     if (addr === 'everyone') return 'Everyone';
-    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    return formatAddressWithENS(addr);
   };
 
 

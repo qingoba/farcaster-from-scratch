@@ -10,7 +10,7 @@ export const mockGifts: Gift[] = [
   {
     id: '1',
     title: '🎉 Happy Birthday Gift!',
-    from: '0x123...abc',
+    from: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
     to: 'everyone',
     amount: '0.5',
     description: 'Celebrating another year of awesome!',
