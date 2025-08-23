@@ -623,6 +623,24 @@
   font-weight: 600;
 }
 
+.transaction-hash {
+  background: var(--surface-color);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  word-break: break-all;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  margin: 0.25rem 0;
+}
+
+.transaction-hash:hover {
+  background: var(--hover-color);
+  border-color: var(--accent-color);
+}
+
 .claim-error {
   margin-top: 0.5rem;
   padding: 0.5rem;

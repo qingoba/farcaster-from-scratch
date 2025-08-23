@@ -5,7 +5,7 @@ import presentAbi from '../abi/raw/Present.abi.json';
 import { nftService } from './nftService';
 
 const PRESENT_CONTRACT_ADDRESS = '0x8cED4381845b1fB450C8D2279ed4c888A38fC08d';
-const BLOCKS_PER_BATCH = 1000000;
+const BLOCKS_PER_BATCH = 200000;
 const ONE_WEEK_BLOCKS = 2000000; // Arbitrum ~200w blocks per week
 
 const publicClient = createPublicClient({
@@ -31,6 +31,7 @@ interface PresentData {
   distType: number;
   claimLimit: bigint;
   claimedCount: bigint;
+  isClaimed: boolean;
 }
 
 export class BlockchainService {

@@ -18,6 +18,23 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
   
   const canClaim = address && canUserClaimGift(gift, address);
   
+  const handleCopyHash = async (hash: string) => {
+    try {
+      await navigator.clipboard.writeText(hash);
+      // Simple feedback - could be enhanced with toast notification
+      const element = document.querySelector('.transaction-hash') as HTMLElement;
+      if (element) {
+        const originalText = element.textContent;
+        element.textContent = 'Copied!';
+        setTimeout(() => {
+          element.textContent = originalText;
+        }, 1000);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+  
   // 为每个礼物分配一个颜色变体
   const getColorVariant = (giftId: string) => {
     const hash = giftId.split('').reduce((a, b) => {
@@ -91,7 +108,14 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
             
             {hash && (
               <div className="claim-status">
-                <p>Transaction: {hash}</p>
+                <p>Transaction:</p>
+                <div 
+                  className="transaction-hash"
+                  onClick={() => handleCopyHash(hash)}
+                  title="Click to copy"
+                >
+                  {hash}
+                </div>
                 {isConfirming && <p>Claiming gift...</p>}
                 {isConfirmed && <p className="success">Gift claimed successfully!</p>}
               </div>
