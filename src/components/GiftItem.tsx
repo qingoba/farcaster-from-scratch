@@ -65,9 +65,7 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
             <span className="gift-from">From: {formatAddress(gift.from)}</span>
             <span className="gift-to">To: {formatRecipients()}</span>
             <span className="gift-amount">{gift.amount} ETH</span>
-            {gift.limit && (
-              <span className="gift-limit">Limit: {gift.claimed}/{gift.limit}</span>
-            )}
+            <span className="gift-limit">Claimed: {gift.claimed}/{gift.limit}</span>
           </div>
           <p className="gift-description">{gift.description}</p>
         </div>

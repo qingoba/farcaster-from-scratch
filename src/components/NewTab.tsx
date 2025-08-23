@@ -14,7 +14,9 @@ export const NewTab: React.FC = () => {
     recipients: [''],
     token: ETH_TOKEN,
     amount: '',
-    description: ''
+    description: '',
+    shares: '1',
+    distributionType: 'equal'
   });
 
   const tokenBalance = useTokenBalance(formData.token);
@@ -94,6 +96,14 @@ export const NewTab: React.FC = () => {
 
   const handleDescriptionChange = (value: string) => {
     setFormData(prev => ({ ...prev, description: value }));
+  };
+
+  const handleSharesChange = (value: string) => {
+    setFormData(prev => ({ ...prev, shares: value }));
+  };
+
+  const handleDistributionTypeChange = (type: 'equal' | 'random') => {
+    setFormData(prev => ({ ...prev, distributionType: type }));
   };
 
   if (!isConnected) {
@@ -220,6 +230,39 @@ export const NewTab: React.FC = () => {
             placeholder="Add a message to your gift"
             rows={3}
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="shares">Number of Shares</label>
+          <input
+            type="number"
+            id="shares"
+            value={formData.shares}
+            onChange={(e) => handleSharesChange(e.target.value)}
+            placeholder="1"
+            min="1"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Distribution Type</label>
+          <div className="recipient-type-selector">
+            <button
+              type="button"
+              className={formData.distributionType === 'equal' ? 'active' : ''}
+              onClick={() => handleDistributionTypeChange('equal')}
+            >
+              Equal Split
+            </button>
+            <button
+              type="button"
+              className={formData.distributionType === 'random' ? 'active' : ''}
+              onClick={() => handleDistributionTypeChange('random')}
+            >
+              Random Split
+            </button>
+          </div>
         </div>
 
         <button 

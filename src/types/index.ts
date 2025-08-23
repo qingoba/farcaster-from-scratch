@@ -33,6 +33,8 @@ export interface NewGiftForm {
   token: Token;
   amount: string;
   description: string;
+  shares: string;
+  distributionType: 'equal' | 'random';
 }
 
 export interface TokenBalance {
