@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { NewGiftForm } from '../types';
 import { SUPPORTED_TOKENS, ETH_TOKEN } from '../services/tokens';
@@ -19,6 +19,17 @@ export const NewTab: React.FC = () => {
 
   const tokenBalance = useTokenBalance(formData.token);
   const { sendGift, isPending, isConfirming, isConfirmed, hash, error } = useGiftTransaction();
+
+  // 自动消失成功弹窗
+  useEffect(() => {
+    if (isConfirmed) {
+      const timer = setTimeout(() => {
+        window.location.reload();
+      }, 4000); // 4秒后自动消失，让用户看完烟花效果
+
+      return () => clearTimeout(timer);
+    }
+  }, [isConfirmed]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,18 +231,23 @@ export const NewTab: React.FC = () => {
         </button>
 
         {isConfirmed && (
-          <div className="success-overlay" onClick={() => window.location.reload()}>
-            <div className="success-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="success-decoration">💎✨🎉✨💎</div>
-              <h2 className="success-title">Gift sent successfully!</h2>
-              <div className="success-sparkles">
-                <span className="sparkle">✨</span>
-                <span className="sparkle">💫</span>
-                <span className="sparkle">⭐</span>
-                <span className="sparkle">✨</span>
-                <span className="sparkle">💫</span>
+          <div className="success-overlay">
+            <div className="success-modal">
+              <div className="success-decoration">
+                <div className="firework-particle">✨</div>
+                <div className="firework-particle">💫</div>
+                <div className="firework-particle">⭐</div>
+                <div className="firework-particle">🌟</div>
+                <div className="firework-particle">💥</div>
+                <div className="firework-particle">✨</div>
+                <div className="firework-particle">💫</div>
+                <div className="firework-particle">⭐</div>
+                <div className="firework-particle">🌟</div>
+                <div className="firework-particle">💥</div>
+                <div className="firework-particle">✨</div>
+                <div className="firework-particle">💫</div>
               </div>
-              <p className="success-hint">Click anywhere to continue</p>
+              <h2 className="success-title">Gift sent successfully!</h2>
             </div>
           </div>
         )}
