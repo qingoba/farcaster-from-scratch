@@ -11,13 +11,14 @@ import { MineTab } from './components/MineTab';
 import { BottomNav } from './components/BottomNav';
 import { UserMenu } from './components/UserMenu';
 import { TWallpaperBackground } from './components/TWallpaperBackground';
+import { GiftClaimAnimation } from './components/GiftClaimAnimation';
 import './styles/App.css';
 import 'twallpaper/dist/style.css';
 
 const queryClient = new QueryClient();
 
 const AppContent: React.FC = () => {
-  const { activeTab, showGiftClaimAnimation } = useApp();
+  const { activeTab, showGiftClaimAnimation, setShowGiftClaimAnimation } = useApp();
 
   const renderActiveTab = () => {
     switch (activeTab) {
@@ -57,28 +58,11 @@ const AppContent: React.FC = () => {
         <BottomNav />
         <UserMenu />
         
-        {/* 主页面礼物打开动画 */}
-        {showGiftClaimAnimation && (
-          <div className="gift-animation-overlay">
-            <div className="gift-animation-container">
-              <div className="gift-box">
-                <div className="gift-box-lid">
-                  <div className="gift-bow">🎀</div>
-                </div>
-                <div className="gift-box-base"></div>
-                <div className="gift-sparkles">
-                  <div className="sparkle-particle">✨</div>
-                  <div className="sparkle-particle">💫</div>
-                  <div className="sparkle-particle">⭐</div>
-                  <div className="sparkle-particle">✨</div>
-                  <div className="sparkle-particle">💎</div>
-                  <div className="sparkle-particle">🎉</div>
-                </div>
-              </div>
-              <div className="gift-success-text">🎁 Gift Claimed! 🎁</div>
-            </div>
-          </div>
-        )}
+        {/* Lottie 礼物领取动画 */}
+        <GiftClaimAnimation
+          isVisible={showGiftClaimAnimation}
+          onComplete={() => setShowGiftClaimAnimation(false)}
+        />
       </div>
     </>
   );
