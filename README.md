@@ -62,6 +62,7 @@ https://github.com/qingoba/GiftCaster
 ## 团队成员
 
 | name | github url |
+| -- | -- |
 | 徐元桢 | https://github.com/aliceyzhsu |
 | 唐彬杰 | https://github.com/binjietang |
 | 刘宇庆 | https://github.com/qingoba |
