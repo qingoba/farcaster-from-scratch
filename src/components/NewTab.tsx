@@ -219,11 +219,20 @@ export const NewTab: React.FC = () => {
           {isPending ? 'Confirming...' : isConfirming ? 'Processing...' : 'Send Gift'}
         </button>
 
-        {hash && (
-          <div className="transaction-status">
-            <p>Transaction Hash: {hash}</p>
-            {isConfirming && <p>Waiting for confirmation...</p>}
-            {isConfirmed && <p className="success">Gift sent successfully!</p>}
+        {isConfirmed && (
+          <div className="success-overlay" onClick={() => window.location.reload()}>
+            <div className="success-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="success-decoration">💎✨🎉✨💎</div>
+              <h2 className="success-title">Gift sent successfully!</h2>
+              <div className="success-sparkles">
+                <span className="sparkle">✨</span>
+                <span className="sparkle">💫</span>
+                <span className="sparkle">⭐</span>
+                <span className="sparkle">✨</span>
+                <span className="sparkle">💫</span>
+              </div>
+              <p className="success-hint">Click anywhere to continue</p>
+            </div>
           </div>
         )}
 
