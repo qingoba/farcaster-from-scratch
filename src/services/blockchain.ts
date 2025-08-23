@@ -3,7 +3,7 @@ import { arbitrumSepolia } from 'viem/chains';
 import { Gift } from '../types';
 import presentAbi from '../abi/raw/Present.abi.json';
 
-const PRESENT_CONTRACT_ADDRESS = '0x3B3cF7ee8dbCDDd8B8451e38269D982F351ca3db';
+const PRESENT_CONTRACT_ADDRESS = '0x62f213eC55Ac62b9b9C0660CEa72fF86C2ddcB70';
 const BLOCKS_PER_BATCH = 1000000;
 const ONE_WEEK_BLOCKS = 2000000; // Arbitrum ~200w blocks per week
 
@@ -12,7 +12,7 @@ const publicClient = createPublicClient({
   transport: http('/api/rpc') // Use Vite proxy
 });
 
-interface WrapPresentEvent {
+interface WrapPresentTestEvent {
   presentId: string;
   sender: string;
   blockNumber: bigint;
@@ -38,9 +38,9 @@ export class BlockchainService {
     return blockNumber;
   }
 
-  // Fetch WrapPresent events in batches
-  private async fetchWrapPresentEvents(): Promise<WrapPresentEvent[]> {
-    console.log('🔍 Starting to fetch WrapPresent events...');
+  // Fetch WrapPresentTest events in batches
+  private async fetchWrapPresentEvents(): Promise<WrapPresentTestEvent[]> {
+    console.log('🔍 Starting to fetch WrapPresentTest events...');
     
     const currentBlock = await this.getCurrentBlock();
     const fromBlock = currentBlock - BigInt(ONE_WEEK_BLOCKS);
@@ -48,7 +48,7 @@ export class BlockchainService {
     console.log(`📅 Searching blocks from ${fromBlock} to ${currentBlock}`);
     console.log(`📊 Total blocks to search: ${currentBlock - fromBlock}`);
     
-    const batches: Promise<WrapPresentEvent[]>[] = [];
+    const batches: Promise<WrapPresentTestEvent[]>[] = [];
     let batchCount = 0;
     
     // Create parallel batch requests
@@ -68,20 +68,20 @@ export class BlockchainService {
     const results = await Promise.all(batches);
     const allEvents = results.flat();
     
-    console.log(`✅ Found total ${allEvents.length} WrapPresent events`);
+    console.log(`✅ Found total ${allEvents.length} WrapPresentTest events`);
     console.log(`📋 Events breakdown:`, results.map((batch, i) => `Batch ${i+1}: ${batch.length} events`));
     
     return allEvents;
   }
 
   // Fetch events for a specific block range
-  private async fetchEventsBatch(fromBlock: bigint, toBlock: bigint, batchNumber: number): Promise<WrapPresentEvent[]> {
+  private async fetchEventsBatch(fromBlock: bigint, toBlock: bigint, batchNumber: number): Promise<WrapPresentTestEvent[]> {
     try {
       console.log(`🔎 Batch ${batchNumber}: Searching blocks ${fromBlock} to ${toBlock}`);
       
       const logs = await publicClient.getLogs({
         address: getAddress(PRESENT_CONTRACT_ADDRESS),
-        event: parseAbiItem('event WrapPresent(bytes32 indexed presentId, address sender)'),
+        event: parseAbiItem('event WrapPresentTest(bytes32 indexed presentId, address sender)'),
         fromBlock,
         toBlock
       });
@@ -166,7 +166,7 @@ export class BlockchainService {
       const events = await this.fetchWrapPresentEvents();
       
       if (events.length === 0) {
-        console.log('⚠️ No WrapPresent events found, returning empty array');
+        console.log('⚠️ No WrapPresentTest events found in live gifts, returning empty array');
         return [];
       }
       
@@ -249,7 +249,7 @@ export class BlockchainService {
       const events = await this.fetchWrapPresentEvents();
       
       if (events.length === 0) {
-        console.log('⚠️ No WrapPresent events found, returning empty array');
+        console.log('⚠️ No WrapPresentTest events found in historic gifts, returning empty array');
         return [];
       }
       

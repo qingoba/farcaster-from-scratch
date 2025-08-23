@@ -4,7 +4,7 @@ import { NewGiftForm } from '../types';
 import presentAbi from '../Present.abi';
 import { ETH_TOKEN } from './tokens';
 
-const PRESENT_CONTRACT_ADDRESS = '0x3B3cF7ee8dbCDDd8B8451e38269D982F351ca3db';
+const PRESENT_CONTRACT_ADDRESS = '0x62f213eC55Ac62b9b9C0660CEa72fF86C2ddcB70';
 
 export interface SendGiftParams {
   recipients: string[];
@@ -35,22 +35,22 @@ export const useGiftTransaction = () => {
         : BigInt(parseFloat(formData.amount) * Math.pow(10, formData.token.decimals))
     }];
 
-    // Call wrapPresent contract function
+    // Call wrapPresentTest contract function
     writeContract({
       address: PRESENT_CONTRACT_ADDRESS as `0x${string}`,
       abi: presentAbi,
-      functionName: 'wrapPresent',
-      args: [recipients, content],
+      functionName: 'wrapPresentTest',
+      args: [recipients, formData.title, formData.description, content],
       value: ethAmount, // Send ETH if needed
     });
   };
 
   const claimGift = async (presentId: string) => {
-    // Call unwrapPresent contract function
+    // Call unwrapPresentTest contract function
     writeContract({
       address: PRESENT_CONTRACT_ADDRESS as `0x${string}`,
       abi: presentAbi,
-      functionName: 'unwrapPresent',
+      functionName: 'unwrapPresentTest',
       args: [presentId as `0x${string}`],
     });
   };
