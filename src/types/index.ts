@@ -9,6 +9,7 @@ export interface Gift {
   limit?: number;
   claimed: number;
   isClaimed: boolean;
+  status: number; // 0 = ACTIVE, 1 = CLAIMED, 2 = EXPIRED, etc.
   nftImage: string;
   createdAt: number;
 }

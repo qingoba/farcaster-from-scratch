@@ -255,6 +255,7 @@ export class BlockchainService {
           limit: Number(details.claimLimit),
           claimed: Number(details.claimedCount),
           isClaimed: details.isClaimed, // User-specific claim status
+          status: details.status, // Contract status
           nftImage,
           createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
         };
@@ -338,6 +339,7 @@ export class BlockchainService {
           limit: Number(details.claimLimit),
           claimed: Number(details.claimedCount),
           isClaimed: details.isClaimed, // User-specific claim status
+          status: details.status, // Contract status
           nftImage,
           createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
         };

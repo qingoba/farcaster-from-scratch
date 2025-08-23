@@ -17,6 +17,8 @@ export const mockGifts: Gift[] = [
     limit: 10,
     claimed: 3,
     isClaimed: false,
+    status: 0, // ACTIVE
+    status: 0, // ACTIVE
     nftImage: 'https://placehold.co/80x80.png?text=🎂',
     createdAt: Date.now() - 3600000
   },
@@ -29,6 +31,7 @@ export const mockGifts: Gift[] = [
     description: 'Thanks for all your help!',
     claimed: 0,
     isClaimed: false,
+    status: 0, // ACTIVE
     nftImage: 'https://placehold.co/80x80.png?text=💝',
     createdAt: Date.now() - 7200000
   },
@@ -42,6 +45,7 @@ export const mockGifts: Gift[] = [
     limit: 5,
     claimed: 5,
     isClaimed: true,
+    status: 1, // CLAIMED
     nftImage: 'https://placehold.co/80x80.png?text=🏆',
     createdAt: Date.now() - 10800000
   }
@@ -65,6 +69,7 @@ export const mockHistoricGifts: Gift[] = [
     description: 'Great work on the Q4 project launch!',
     claimed: 5,
     isClaimed: true,
+    status: 1, // CLAIMED
     nftImage: 'https://placehold.co/80x80.png?text=🎊',
     createdAt: Date.now() - 86400000
   },
@@ -81,6 +86,7 @@ export const mockHistoricGifts: Gift[] = [
     description: 'Congratulations on your wedding!',
     claimed: 2,
     isClaimed: true,
+    status: 1, // CLAIMED
     nftImage: 'https://placehold.co/80x80.png?text=💒',
     createdAt: Date.now() - 172800000
   },
@@ -96,6 +102,7 @@ export const mockHistoricGifts: Gift[] = [
     description: 'First place in the DeFi category!',
     claimed: 1,
     isClaimed: true,
+    status: 1, // CLAIMED
     nftImage: 'https://placehold.co/80x80.png?text=🏅',
     createdAt: Date.now() - 259200000
   },
@@ -117,6 +124,7 @@ export const mockHistoricGifts: Gift[] = [
     description: 'Congratulations on graduating with honors!',
     claimed: 7,
     isClaimed: true,
+    status: 1, // CLAIMED
     nftImage: 'https://placehold.co/80x80.png?text=🎓',
     createdAt: Date.now() - 345600000
   }

@@ -6,7 +6,15 @@ export const ExploreTab: React.FC = () => {
   const { exploreMode, setExploreMode, gifts, loading, refreshGifts } = useApp();
   
   const filteredGifts = gifts
-    .filter(gift => exploreMode === 'live' ? !gift.isClaimed : gift.isClaimed)
+    .filter(gift => {
+      if (exploreMode === 'live') {
+        // Live: show active gifts (status === 0) that user hasn't claimed
+        return gift.status === 0 && !gift.isClaimed;
+      } else {
+        // Historic: show claimed gifts or inactive gifts
+        return gift.isClaimed || gift.status !== 0;
+      }
+    })
     .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount))
     .slice(0, 50);
 
