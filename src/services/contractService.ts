@@ -4,7 +4,7 @@ import { NewGiftForm } from '../types';
 import presentAbi from '../Present.abi';
 import { ETH_TOKEN } from './tokens';
 
-const PRESENT_CONTRACT_ADDRESS = '0x62f213eC55Ac62b9b9C0660CEa72fF86C2ddcB70';
+const PRESENT_CONTRACT_ADDRESS = '0x5Ee00E5BA73d7ab2fe0B1d9aDa12212CB7ae28f0';
 
 export interface SendGiftParams {
   recipients: string[];
@@ -35,22 +35,35 @@ export const useGiftTransaction = () => {
         : BigInt(parseFloat(formData.amount) * Math.pow(10, formData.token.decimals))
     }];
 
-    // Call wrapPresentTest contract function
+    // Distribution type: 1 = equal split, 3 = random split
+    const distributionType = formData.distributionType === 'equal' ? 1 : 3;
+
+    // Calculate claim limit
+    const claimLimit = parseInt(formData.shares);
+
+    // Call wrapPresent contract function
     writeContract({
       address: PRESENT_CONTRACT_ADDRESS as `0x${string}`,
       abi: presentAbi,
-      functionName: 'wrapPresentTest',
-      args: [recipients, formData.title, formData.description, content],
+      functionName: 'wrapPresent',
+      args: [
+        recipients,
+        formData.title,
+        formData.description,
+        content,
+        distributionType,
+        BigInt(claimLimit)
+      ],
       value: ethAmount, // Send ETH if needed
     });
   };
 
   const claimGift = async (presentId: string) => {
-    // Call unwrapPresentTest contract function
+    // Call unwrapPresent contract function
     writeContract({
       address: PRESENT_CONTRACT_ADDRESS as `0x${string}`,
       abi: presentAbi,
-      functionName: 'unwrapPresentTest',
+      functionName: 'claimPresent',
       args: [presentId as `0x${string}`],
     });
   };

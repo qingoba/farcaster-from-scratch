@@ -35,6 +35,43 @@
   },
   {
     "type": "function",
+    "name": "claimPresent",
+    "inputs": [
+      {
+        "name": "presentId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "claims",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "defaultExpiryPeriod",
     "inputs": [],
     "outputs": [
@@ -94,28 +131,6 @@
         "internalType": "address"
       },
       {
-        "name": "recipients",
-        "type": "address[]",
-        "internalType": "address[]"
-      },
-      {
-        "name": "content",
-        "type": "tuple[]",
-        "internalType": "struct Present.Asset[]",
-        "components": [
-          {
-            "name": "tokens",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "amounts",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
-      },
-      {
         "name": "title",
         "type": "string",
         "internalType": "string"
@@ -132,6 +147,21 @@
       },
       {
         "name": "expiryAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "distType",
+        "type": "uint8",
+        "internalType": "enum DistributionType"
+      },
+      {
+        "name": "claimLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "claimedCount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -152,7 +182,7 @@
       {
         "name": "",
         "type": "tuple[]",
-        "internalType": "struct Present.Asset[]",
+        "internalType": "struct Asset[]",
         "components": [
           {
             "name": "tokens",
@@ -165,6 +195,25 @@
             "internalType": "uint256"
           }
         ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPresentRecipients",
+    "inputs": [
+      {
+        "name": "presentId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
       }
     ],
     "stateMutability": "view"
@@ -358,6 +407,21 @@
         "name": "expiryAt",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "distType",
+        "type": "uint8",
+        "internalType": "enum DistributionType"
+      },
+      {
+        "name": "claimLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "claimedCount",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -408,19 +472,6 @@
   {
     "type": "function",
     "name": "takeBack",
-    "inputs": [
-      {
-        "name": "presentId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "takeBackTest",
     "inputs": [
       {
         "name": "presentId",
@@ -505,32 +556,6 @@
   },
   {
     "type": "function",
-    "name": "unwrapPresent",
-    "inputs": [
-      {
-        "name": "presentId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "unwrapPresentTest",
-    "inputs": [
-      {
-        "name": "presentId",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "unwrappedNFT",
     "inputs": [],
     "outputs": [
@@ -608,14 +633,24 @@
     "name": "wrapPresent",
     "inputs": [
       {
-        "name": "recipients",
+        "name": "_recipients",
         "type": "address[]",
         "internalType": "address[]"
       },
       {
-        "name": "content",
+        "name": "_title",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_content",
         "type": "tuple[]",
-        "internalType": "struct Present.Asset[]",
+        "internalType": "struct Asset[]",
         "components": [
           {
             "name": "tokens",
@@ -628,46 +663,16 @@
             "internalType": "uint256"
           }
         ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "wrapPresentTest",
-    "inputs": [
-      {
-        "name": "recipients",
-        "type": "address[]",
-        "internalType": "address[]"
       },
       {
-        "name": "title",
-        "type": "string",
-        "internalType": "string"
+        "name": "_distType",
+        "type": "uint8",
+        "internalType": "enum DistributionType"
       },
       {
-        "name": "description",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "content",
-        "type": "tuple[]",
-        "internalType": "struct Present.Asset[]",
-        "components": [
-          {
-            "name": "tokens",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "amounts",
-            "type": "uint256",
-            "internalType": "uint256"
-          }
-        ]
+        "name": "_claimLimit",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -808,25 +813,6 @@
   },
   {
     "type": "event",
-    "name": "TakeBackTest",
-    "inputs": [
-      {
-        "name": "presentId",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "sender",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
     "name": "TokenBlacklisted",
     "inputs": [
       {
@@ -878,45 +864,7 @@
   },
   {
     "type": "event",
-    "name": "UnwrapPresentTest",
-    "inputs": [
-      {
-        "name": "presentId",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "taker",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
     "name": "WrapPresent",
-    "inputs": [
-      {
-        "name": "presentId",
-        "type": "bytes32",
-        "indexed": true,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "sender",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "WrapPresentTest",
     "inputs": [
       {
         "name": "presentId",

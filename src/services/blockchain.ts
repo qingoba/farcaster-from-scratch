@@ -4,7 +4,7 @@ import { Gift } from '../types';
 import presentAbi from '../abi/raw/Present.abi.json';
 import { nftService } from './nftService';
 
-const PRESENT_CONTRACT_ADDRESS = '0x62f213eC55Ac62b9b9C0660CEa72fF86C2ddcB70';
+const PRESENT_CONTRACT_ADDRESS = '0x5Ee00E5BA73d7ab2fe0B1d9aDa12212CB7ae28f0';
 const BLOCKS_PER_BATCH = 1000000;
 const ONE_WEEK_BLOCKS = 2000000; // Arbitrum ~200w blocks per week
 
@@ -13,7 +13,7 @@ const publicClient = createPublicClient({
   transport: http('/api/rpc') // Use Vite proxy
 });
 
-interface WrapPresentTestEvent {
+interface WrapPresentEvent {
   presentId: string;
   sender: string;
   blockNumber: bigint;
@@ -28,6 +28,9 @@ interface PresentData {
   description: string;
   status: number;
   expiryAt: bigint;
+  distType: number;
+  claimLimit: bigint;
+  claimedCount: bigint;
 }
 
 export class BlockchainService {
@@ -40,8 +43,8 @@ export class BlockchainService {
   }
 
   // Fetch WrapPresentTest events in batches
-  private async fetchWrapPresentEvents(): Promise<WrapPresentTestEvent[]> {
-    console.log('🔍 Starting to fetch WrapPresentTest events...');
+  private async fetchWrapPresentEvents(): Promise<WrapPresentEvent[]> {
+    console.log('🔍 Starting to fetch WrapPresent events...');
     
     const currentBlock = await this.getCurrentBlock();
     const fromBlock = currentBlock - BigInt(ONE_WEEK_BLOCKS);
@@ -49,7 +52,7 @@ export class BlockchainService {
     console.log(`📅 Searching blocks from ${fromBlock} to ${currentBlock}`);
     console.log(`📊 Total blocks to search: ${currentBlock - fromBlock}`);
     
-    const batches: Promise<WrapPresentTestEvent[]>[] = [];
+    const batches: Promise<WrapPresentEvent[]>[] = [];
     let batchCount = 0;
     
     // Create parallel batch requests
@@ -69,20 +72,20 @@ export class BlockchainService {
     const results = await Promise.all(batches);
     const allEvents = results.flat();
     
-    console.log(`✅ Found total ${allEvents.length} WrapPresentTest events`);
+    console.log(`✅ Found total ${allEvents.length} WrapPresent events`);
     console.log(`📋 Events breakdown:`, results.map((batch, i) => `Batch ${i+1}: ${batch.length} events`));
     
     return allEvents;
   }
 
   // Fetch events for a specific block range
-  private async fetchEventsBatch(fromBlock: bigint, toBlock: bigint, batchNumber: number): Promise<WrapPresentTestEvent[]> {
+  private async fetchEventsBatch(fromBlock: bigint, toBlock: bigint, batchNumber: number): Promise<WrapPresentEvent[]> {
     try {
       console.log(`🔎 Batch ${batchNumber}: Searching blocks ${fromBlock} to ${toBlock}`);
       
       const logs = await publicClient.getLogs({
         address: getAddress(PRESENT_CONTRACT_ADDRESS),
-        event: parseAbiItem('event WrapPresentTest(bytes32 indexed presentId, address sender)'),
+        event: parseAbiItem('event WrapPresent(bytes32 indexed presentId, address sender)'),
         fromBlock,
         toBlock
       });
@@ -106,28 +109,53 @@ export class BlockchainService {
     try {
       console.log(`📦 Fetching details for present: ${presentId}`);
       
-      const result = await publicClient.readContract({
+      // Get basic present info
+      const presentInfo = await publicClient.readContract({
         address: getAddress(PRESENT_CONTRACT_ADDRESS),
         abi: presentAbi,
         functionName: 'getPresent',
         args: [presentId]
-      }) as [string, string[], Array<{ tokens: string; amounts: bigint }>, string, string, number, bigint];
+      }) as [string, string, string, number, bigint, number, bigint, bigint];
+
+      // Get recipients separately
+      const recipients = await publicClient.readContract({
+        address: getAddress(PRESENT_CONTRACT_ADDRESS),
+        abi: presentAbi,
+        functionName: 'getPresentRecipients',
+        args: [presentId]
+      }) as string[];
+
+      // Get content separately  
+      const content = await publicClient.readContract({
+        address: getAddress(PRESENT_CONTRACT_ADDRESS),
+        abi: presentAbi,
+        functionName: 'getPresentContent',
+        args: [presentId]
+      }) as Array<{ tokens: string; amounts: bigint }>;
+
+      const [sender, title, description, status, expiryAt, distType, claimLimit, claimedCount] = presentInfo;
 
       const presentData = {
-        sender: result[0],
-        recipients: result[1],
-        content: result[2],
-        title: result[3],
-        description: result[4],
-        status: result[5],
-        expiryAt: result[6]
+        sender,
+        recipients,
+        content,
+        title,
+        description,
+        status,
+        expiryAt,
+        distType,
+        claimLimit,
+        claimedCount
       };
 
-      console.log(`✅ Present ${presentId.slice(0, 10)}... details:`, {
+      console.log(`✅ Got Present Detail ${presentId.slice(0, 10)}... details:`, {
         title: presentData.title,
         status: presentData.status,
         recipientCount: presentData.recipients.length,
-        contentCount: presentData.content.length
+        contentCount: presentData.content.length,
+        claimLimit: presentData.claimLimit,
+        claimedCount: presentData.claimedCount,
+        distType: presentData.distType
       });
 
       return presentData;
@@ -178,7 +206,7 @@ export class BlockchainService {
       const events = await this.fetchWrapPresentEvents();
       
       if (events.length === 0) {
-        console.log('⚠️ No WrapPresentTest events found in live gifts, returning empty array');
+        console.log('⚠️ No WrapPresent events found in live gifts, returning empty array');
         return [];
       }
       
@@ -211,8 +239,8 @@ export class BlockchainService {
           recipients: details.recipients,
           amount: totalValue,
           description: details.description || '',
-          limit: details.recipients.length === 0 ? undefined : details.recipients.length,
-          claimed: 0, // TODO: Calculate actual claimed count
+          limit: Number(details.claimLimit),
+          claimed: Number(details.claimedCount),
           isClaimed: false,
           nftImage,
           createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
@@ -261,7 +289,7 @@ export class BlockchainService {
       const events = await this.fetchWrapPresentEvents();
       
       if (events.length === 0) {
-        console.log('⚠️ No WrapPresentTest events found in historic gifts, returning empty array');
+        console.log('⚠️ No WrapPresent events found in historic gifts, returning empty array');
         return [];
       }
       
@@ -294,8 +322,8 @@ export class BlockchainService {
           recipients: details.recipients,
           amount: totalValue,
           description: details.description || '',
-          limit: details.recipients.length === 0 ? undefined : details.recipients.length,
-          claimed: details.recipients.length === 0 ? 1 : details.recipients.length, // Assume fully claimed
+          limit: Number(details.claimLimit),
+          claimed: Number(details.claimedCount),
           isClaimed: true,
           nftImage,
           createdAt: Date.now() - Math.random() * 604800000 // Random time within last week
