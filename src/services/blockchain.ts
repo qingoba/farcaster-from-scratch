@@ -2,6 +2,7 @@ import { createPublicClient, http, parseAbiItem, getAddress } from 'viem';
 import { arbitrumSepolia } from 'viem/chains';
 import { Gift } from '../types';
 import presentAbi from '../abi/raw/Present.abi.json';
+import { nftService } from './nftService';
 
 const PRESENT_CONTRACT_ADDRESS = '0x62f213eC55Ac62b9b9C0660CEa72fF86C2ddcB70';
 const BLOCKS_PER_BATCH = 1000000;
@@ -136,10 +137,21 @@ export class BlockchainService {
     }
   }
 
-  // Get NFT image URL (placeholder for now)
-  private async getNFTImage(presentId: string): Promise<string> {
-    // TODO: Implement actual NFT metadata fetching
-    return `https://placehold.co/80x80.png?text=${presentId.slice(2, 4)}`;
+  // Get NFT image URL from contract
+  private async getNFTImage(presentId: string, isClaimed: boolean = false): Promise<string> {
+    try {
+      if (isClaimed) {
+        // Get unwrapped NFT image for claimed gifts
+        return await nftService.getUnwrappedNFTImage(presentId);
+      } else {
+        // Get wrapped NFT image for unclaimed gifts
+        return await nftService.getWrappedNFTImage(presentId);
+      }
+    } catch (error) {
+      console.error(`💥 Error getting NFT image for ${presentId}:`, error);
+      // Fallback to placeholder
+      return isClaimed ? '/images/unwrapped-gift-placeholder.svg' : '/images/wrapped-gift-placeholder.svg';
+    }
   }
 
   // Calculate total ETH value from content
@@ -188,7 +200,7 @@ export class BlockchainService {
           return null;
         }
         
-        const nftImage = await this.getNFTImage(event.presentId);
+        const nftImage = await this.getNFTImage(event.presentId, false); // Live gifts are not claimed
         const totalValue = this.calculateTotalValue(details.content);
         
         const gift: Gift = {
@@ -271,7 +283,7 @@ export class BlockchainService {
           return null;
         }
         
-        const nftImage = await this.getNFTImage(event.presentId);
+        const nftImage = await this.getNFTImage(event.presentId, true); // Historic gifts are claimed
         const totalValue = this.calculateTotalValue(details.content);
         
         const gift: Gift = {
