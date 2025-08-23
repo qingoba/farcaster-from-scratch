@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import sdk from '@farcaster/miniapp-sdk';
 import type { Context } from '@farcaster/miniapp-sdk';
@@ -62,7 +62,7 @@ export function FarcasterProvider({ children }: FarcasterProviderProps) {
   return (
     <FarcasterContext.Provider
       value={{
-        context: farcasterContextQuery.data?.context,
+        context: farcasterContextQuery.data?.context || undefined,
         actions: sdk.actions,
         haptics: sdk.haptics,
         isLoading: farcasterContextQuery.isPending,

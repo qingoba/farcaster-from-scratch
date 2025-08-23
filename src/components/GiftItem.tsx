@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi';
 import { Gift } from '../types';
 import { canUserClaimGift } from '../data/mockData';
 import { useGiftTransaction } from '../services/contractService';
+import { useApp } from '../context/AppContext';
 
 interface GiftItemProps {
   gift: Gift;
@@ -11,8 +12,8 @@ interface GiftItemProps {
 
 export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = false }) => {
   const { address } = useAccount();
+  const { setShowGiftClaimAnimation } = useApp();
   const [showRecipients, setShowRecipients] = useState(false);
-  const [showGiftAnimation, setShowGiftAnimation] = useState(false);
   const { claimGift, isPending, isConfirming, isConfirmed, hash, error } = useGiftTransaction();
   
   const canClaim = address && canUserClaimGift(gift, address);
@@ -22,9 +23,7 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
-  const formatTransactionHash = (hash: string) => {
-    return `${hash.slice(0, 8)}...${hash.slice(-8)}`;
-  };
+
 
   const formatRecipients = () => {
     if (gift.to === 'everyone') return 'Everyone';
@@ -45,13 +44,13 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
   const handleClaimGift = async () => {
     if (!canClaim) return;
     
-    // 显示3D礼物打开动画
-    setShowGiftAnimation(true);
+    // 显示全屏礼物打开动画
+    setShowGiftClaimAnimation(true);
     
-    // 2.5秒后隐藏动画
+    // 4秒后隐藏动画
     setTimeout(() => {
-      setShowGiftAnimation(false);
-    }, 2500);
+      setShowGiftClaimAnimation(false);
+    }, 4000);
     
     await claimGift(gift.id);
   };
@@ -119,28 +118,7 @@ export const GiftItem: React.FC<GiftItemProps> = ({ gift, showClaimButton = fals
         </div>
       )}
       
-      {/* 3D礼物打开动画 */}
-      {showGiftAnimation && (
-        <div className="gift-animation-overlay">
-          <div className="gift-animation-container">
-            <div className="gift-box">
-              <div className="gift-box-lid">
-                <div className="gift-bow">🎀</div>
-              </div>
-              <div className="gift-box-base"></div>
-              <div className="gift-sparkles">
-                <div className="sparkle-particle">✨</div>
-                <div className="sparkle-particle">💫</div>
-                <div className="sparkle-particle">⭐</div>
-                <div className="sparkle-particle">✨</div>
-                <div className="sparkle-particle">💎</div>
-                <div className="sparkle-particle">🎉</div>
-              </div>
-            </div>
-            <div className="gift-success-text">🎁 Gift Claimed! 🎁</div>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 };

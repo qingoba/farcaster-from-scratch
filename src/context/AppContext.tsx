@@ -19,6 +19,10 @@ interface AppContextType {
   // UI State
   showUserMenu: boolean;
   setShowUserMenu: (show: boolean) => void;
+  
+  // Global animations
+  showGiftClaimAnimation: boolean;
+  setShowGiftClaimAnimation: (show: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -30,6 +34,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showGiftClaimAnimation, setShowGiftClaimAnimation] = useState(false);
 
   // Fetch gifts data
   const fetchGifts = async () => {
@@ -71,7 +76,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     loading,
     refreshGifts,
     showUserMenu,
-    setShowUserMenu
+    setShowUserMenu,
+    showGiftClaimAnimation,
+    setShowGiftClaimAnimation
   };
 
   console.log(`📊 AppContext render - gifts: ${gifts.length}, loading: ${loading}`);

@@ -18,7 +18,7 @@ export const NewTab: React.FC = () => {
   });
 
   const tokenBalance = useTokenBalance(formData.token);
-  const { sendGift, isPending, isConfirming, isConfirmed, hash, error } = useGiftTransaction();
+  const { sendGift, isPending, isConfirming, isConfirmed, error } = useGiftTransaction();
 
   // 自动消失成功弹窗
   useEffect(() => {
