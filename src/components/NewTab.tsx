@@ -98,8 +98,6 @@ export const NewTab: React.FC = () => {
 
   return (
     <div className="new-tab">
-      <h2>Send a Gift</h2>
-      
       <form onSubmit={handleSubmit} className="gift-form">
         <div className="form-group">
           <label htmlFor="title">Gift Title</label>

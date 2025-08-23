@@ -32,28 +32,188 @@
 
 /* 移除浮动粒子效果 */
 
-/* 标题样式 - 移除霓虹灯效果 */
+/* 钻石金色渐变标题样式 */
 .app-title {
-  color: #d63384;
+  background: linear-gradient(135deg, #ff6b35 0%, #c0963d 50%, #40e0ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-weight: 600;
+  text-shadow: 0 2px 4px rgba(255, 107, 53, 0.2);
+  position: relative;
 }
 
-/* 金色边框效果 */
+.app-title::before {
+  content: '💎';
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  animation: diamondSparkle 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(64, 224, 255, 0.6));
+}
+
+/* 炫酷渐变边框效果 */
+@keyframes borderGlow {
+  0% { 
+    border-color: rgba(255, 107, 53, 0.4);
+    box-shadow: 
+      0 0 20px rgba(255, 107, 53, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    border-color: rgba(192, 150, 61, 0.6);
+    box-shadow: 
+      0 0 30px rgba(192, 150, 61, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  100% { 
+    border-color: rgba(255, 107, 53, 0.4);
+    box-shadow: 
+      0 0 20px rgba(255, 107, 53, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes diamondSparkle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  25% { 
+    transform: scale(1.2) rotate(45deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(0.9) rotate(90deg);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: scale(1.1) rotate(135deg);
+    opacity: 1;
+  }
+}
+
+@keyframes diamondGlow {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(64, 224, 255, 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(64, 224, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6);
+  }
+}
+
 .gift-item {
-  border: 1px solid rgba(192, 150, 61, 0.3);
+  position: relative;
+  border: 2px solid;
+  border-image: linear-gradient(45deg, 
+    rgba(255, 107, 53, 0.6), 
+    rgba(192, 150, 61, 0.8), 
+    rgba(255, 107, 53, 0.6)
+  ) 1;
   box-shadow: 
-    0 8px 32px rgba(192, 150, 61, 0.2),
+    0 8px 32px rgba(255, 107, 53, 0.15),
+    0 0 20px rgba(192, 150, 61, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+.gift-item::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    transparent, 
+    rgba(255, 107, 53, 0.1), 
+    transparent, 
+    rgba(192, 150, 61, 0.1), 
+    transparent
+  );
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: shimmer 2s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .gift-item:hover {
-  border-color: rgba(192, 150, 61, 0.6);
+  transform: translateY(-4px) scale(1.02);
+  border-image: linear-gradient(45deg, 
+    rgba(255, 107, 53, 0.9), 
+    rgba(192, 150, 61, 1), 
+    rgba(255, 107, 53, 0.9)
+  ) 1;
   box-shadow: 
-    0 12px 40px rgba(192, 150, 61, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 0 20px rgba(192, 150, 61, 0.3);
-  transform: translateY(-3px) scale(1.02);
+    0 15px 45px rgba(255, 107, 53, 0.25),
+    0 0 30px rgba(192, 150, 61, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2),
+    0 0 60px rgba(255, 107, 53, 0.1);
+  animation: borderGlow 1.5s ease-in-out infinite;
+}
+
+.gift-item:hover::before {
+  opacity: 1;
+}
+
+/* 钻石装饰效果 */
+.gift-item::after {
+  content: '💎';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 20px;
+  z-index: 10;
+  animation: diamondSparkle 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(64, 224, 255, 0.6));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gift-item:hover::after {
+  opacity: 1;
+  animation: diamondSparkle 1s ease-in-out infinite;
+}
+
+/* CSS钻石形状（备选方案） */
+.diamond-shape {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-bottom: 12px solid #40e0ff;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: diamondGlow 2s ease-in-out infinite;
+}
+
+.diamond-shape::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top: 8px solid #40e0ff;
+}
+
+.gift-item:hover .diamond-shape {
+  opacity: 1;
+  animation: diamondGlow 1s ease-in-out infinite, diamondSparkle 1.5s ease-in-out infinite;
 }
 
 /* Header */
@@ -77,9 +237,9 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
-  color: #d63384;
   text-align: center;
   flex: 1;
+  /* 颜色和渐变效果已在上面定义 */
 }
 
 .user-info-button {
@@ -187,7 +347,7 @@
   font-weight: 500;
 }
 
-/* Gift Items */
+/* Gift Items - 继承炫酷边框效果 */
 .gift-item {
   display: flex;
   background: rgba(255, 255, 255, 0.95);
@@ -195,15 +355,8 @@
   border-radius: 16px;
   padding: 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   gap: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
-.gift-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  /* 边框和阴影效果已在上面的炫酷效果中定义 */
 }
 
 .gift-content {
@@ -214,8 +367,20 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
-  color: #2c3e50;
+  background: linear-gradient(135deg, #2c3e50 0%, #ff6b35 50%, #c0963d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1.3;
+  transition: all 0.3s ease;
+}
+
+.gift-item:hover .gift-title {
+  background: linear-gradient(135deg, #ff6b35 0%, #c0963d 50%, #ff6b35 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(255, 107, 53, 0.2);
 }
 
 .gift-details {
@@ -237,6 +402,25 @@
 .gift-amount {
   font-weight: 600;
   color: #27ae60 !important;
+  position: relative;
+  display: inline-block;
+}
+
+.gift-amount::before {
+  content: '💎 ';
+  font-size: 0.8em;
+  animation: diamondSparkle 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 3px rgba(64, 224, 255, 0.5));
+}
+
+.gift-item:hover .gift-amount {
+  color: #40e0ff !important;
+  text-shadow: 0 0 8px rgba(64, 224, 255, 0.6);
+}
+
+.gift-item:hover .gift-amount::before {
+  animation: diamondSparkle 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(64, 224, 255, 0.8));
 }
 
 .gift-description {
@@ -255,7 +439,20 @@
   height: 80px;
   border-radius: 12px;
   object-fit: cover;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 107, 53, 0.3);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 0 15px rgba(255, 107, 53, 0.2);
+  transition: all 0.3s ease;
+}
+
+.gift-item:hover .gift-nft img {
+  border-color: rgba(255, 107, 53, 0.6);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(255, 107, 53, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(1.05) rotate(2deg);
 }
 
 .claim-button {
