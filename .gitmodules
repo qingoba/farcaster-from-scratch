@@ -1,0 +1,3 @@
+[submodule "src/contract-code"]
+	path = src/contract-code
+	url = https://github.com/ChenRunnan-Cooper/FARGIFT.git
